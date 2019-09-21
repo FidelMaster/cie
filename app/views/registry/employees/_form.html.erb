@@ -1,0 +1,164 @@
+<%= form_for(registry_employee, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_employee.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_employee.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_employee.one")%></h2>
+
+      <ul>
+        <% registry_employee.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombres <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :first_name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :last_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Apellidos <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :last_name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :birth_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Nacimiento <span class="required">*
+    <%end%> 
+    <fieldset class="col-md-6 col-sm-6 col-xs-12">
+      <div class="control-group">
+        <div class="controls">
+          <div class="xdisplay_inputx form-group has-feedback">
+            <%= f.text_field :birth_date, :class=>"form-control datepicker birth_date", :required=>"required", :placeholder=>"dd/mm/yyyy"%>
+            <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <% if !f.object.new_record? %>
+        <script>
+          birth_date = "<%=f.object.birth_date_formatted%>"
+        </script>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_employee_position_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Cargo
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_employee_position_id, Registry::EmployeePosition.all, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :start_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de inicio en la compañía <span class="required">*</span>
+    <%end%> 
+    <fieldset class="col-md-6 col-sm-6 col-xs-12">
+      <div class="control-group">
+        <div class="controls">
+          <div class="xdisplay_inputx form-group has-feedback">
+            <%= f.text_field :start_date, :class=>"form-control datepicker", :required=>"required", :placeholder=>"dd/mm/yyyy"%>
+            <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <% if !f.object.new_record? %>
+        <script>
+          start_date = "<%=f.object.start_date_formatted%>"
+        </script>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :email, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Email
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.email_field :email, :class=>"form-control col-md-7 col-xs-12"%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :active, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Colaborador activo
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.check_box :active, :class=>"flat" %>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <hr/>
+
+  <div class="item form-group">
+    <%= f.label :registry_therapy_group_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Grupo de terapia
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_therapy_group_id, Registry::TherapyGroup.all, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :boss_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Coordinador
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <div id="boss_container">
+        <%=render partial: "boss", :locals => {:boss => nil}%>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="form-group">
+    <%=f.label :avatar, :class=>"control-label col-md-3 col-sm-3 col-xs-12"%>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.file_field :avatar, :placeholder => "Avatar" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", registry_employees_path, :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function(){
+
+    var bossId = "<%= @registry_employee.present? ? @registry_employee.boss_id : nil%>";
+    var selfId = "<%= @registry_employee.present? ? @registry_employee.id : nil%>";
+    value = $("#registry_employee_registry_therapy_group_id").val();
+    if (value != "") {
+      $(".container.spinner").show();
+      $.getScript('/registry/employees/load_boss?boss_id=' + bossId + '&therapy_group_id=' + value + '&self_id=' + selfId, function() {
+        init_select2();
+      });
+    }
+    $("#registry_employee_registry_therapy_group_id").on("change", function(){
+      value = $(this).val();
+      if (value != "") {
+        $(".container.spinner").show();
+        $.getScript('/registry/employees/load_boss?boss_id=' + bossId + '&therapy_group_id=' + value + '&self_id=' + selfId, function() {
+          init_select2();
+        });
+      }
+    });
+  });
+</script>

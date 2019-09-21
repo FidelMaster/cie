@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=@page_title%></title>
+	<%= csrf_meta_tags %>
+
+	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+	<!-- jVectorMap -->
+	<script src="/assets/maps/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="/assets/maps/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="/assets/maps/gdp-data.js"></script>
+	<%= favicon_link_tag 'favicon.ico', type: 'image/png' %>
+	<%= favicon_link_tag 'favicon.ico'%>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"/>
+    <!-- Lesther css -->
+
+    <!-- fuente lato -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="/assets/default.css" />
+    <!-- Smartphones (portrait 240 - 320) -->
+    <link rel="stylesheet" href="/assets/s240_base.css" type="text/css" media="only screen and (min-width : 240px)" />
+    <link rel="stylesheet" href="/assets/s240_body.css" type="text/css" media="only screen and (min-width : 240px)" />
+
+    <!-- js -->
+   	<script src="/assets/show_hide.js"></script>
+</head>
+
+<body class="nav-md footer_fixed">
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col menu_fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<div class="nav toggle"><a id="menu_toggle"></a></div>
+						
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+					<div class="profile clearfix">
+
+
+						<div class="profile_pic_container" alt="" title="">
+									
+							<div class="notification_sidebar">
+								<li class="dropdown">
+	                                
+	                            </li>
+							</div>
+							
+
+
+                         	<div class="profile_pic circle" style="background-image: url('<%=current_cie_user.image_source("avatar")%>');"></div>
+                        </div>
+                        <div class="profile_info">
+                            <span class="name_profile"><%=link_to current_cie_user.name.to_s, edit_admin_admin_user_registration_path(current_cie_user.id)%></span>
+                            <span class="data_profile">ADMINISTRADOR</span>
+                        </div>
+
+					</div>
+					<!-- /menu profile quick info -->
+
+					<br />
+					<!-- sidebar menu -->
+					
+					<!-- /sidebar menu -->
+					<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    	<div class="menu_section">
+
+
+							<ul class="nav side-menu" style="display: block;">
+								<li class="<%= current_page(Registry::DashboardController)%>">
+		                        	<a href="<%=session_root_path%>">
+		                        		<i class="dashboard_icon icon"></i> Dashboard
+		                        	</a>
+		                        </li>
+								
+								<li><a><i class="rrhh_icon icon"></i>Roles</a>
+									<ul class="nav child_menu">
+										<li class="<%= current_page(Admin::CieRolesController)%>"><%=link_to "Usuario de Registro", admin_cie_roles_path%></li>
+									</ul>
+								</li>
+								<li><a><i class="registry_icon icon"></i>Registro</a>
+									<ul class="nav child_menu">
+										<li class="<%= current_page(Admin::CieUsersController)%>"><%=link_to "Usuarios", admin_cie_users_path%></li>
+										<li class="<%= current_page(Admin::ParametersController)%>"><%=link_to "Parámetros", admin_parameters_path%></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<script>
+						$(".current-page").parent().parent().addClass("active");
+						$(".current-page").parent().css("display","block");
+					</script>
+					<!-- /menu footer buttons -->
+					<%=footer_menu%>
+					<!-- /menu footer buttons -->
+				</div>
+			</div>
+
+			<!-- top navigation -->
+			<%=top_nav_menu%>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<%=yield%>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer>
+				<div class="logo_cie_container circle">
+                    <div class="logo_cie icon"></div>
+                </div>
+                <div class="pull-right">
+                    CIE powered by <a href="http://digitech.net.ni/digitech/" target="_blank">Digitech</a>
+                </div>
+                <div class="clearfix"></div>
+			</footer>
+			<!-- /footer content -->
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+wb = xlsx_package.workbook
+titles = ['No.', 'Fecha', 'Hora', 'Tutor/Padre/Madre', 'Firma del padre/representante', 
+    'Número de cédula del padre o tutor del niño',
+    'Colaborador/a que recibe',
+    'Colaborador/a que entrega'
+    ]
+assistances = @patient_assistance
+rows = Array.new
+wb.styles do |s|
+	cell_styles = s.add_style :fg_color=> "000000",
+                            :b => true,
+                            :bg_color => "eaeae1"
+    wb.add_worksheet(name: 'Asistencia') do |sheet|
+        sheet.add_row ["Nombre del cliente: #{@registry_patient.display_name}"]
+        sheet.add_row ["Días de servicio del: #{@start_date.to_date.strftime("%d/%m/%Y")}" + ' al ' +  "#{@end_date.to_date.strftime("%d/%m/%Y")}"]
+        sheet.add_row titles, style: cell_styles
+        assistances.reverse.each_with_index do |assistance, index|
+            unless assistance.received_at.nil? || assistance.delivered_at.nil?
+                from_to = assistance.received_at.strftime("%H:%M") + ' - ' + assistance.delivered_at.strftime("%H:%M")
+            else
+                from_to = assistance.assistance_date.strftime("%T")
+            end
+            if !assistance.employee_who_receives.nil?
+                received_by = assistance.employee_who_receives.display_name
+            elsif !assistance.registry_employee.nil?
+                received_by = assistance.registry_employee.display_name
+            else
+                received_by = ''
+            end
+            if !assistance.employee_who_delivers.nil?
+                 delivered_by = assistance.employee_who_delivers.display_name
+            elsif !assistance.registry_employee.nil?
+                 delivered_by = assistance.registry_employee.display_name
+            else
+                 delivered_by = ''
+            end
+            rows << [ index+1, assistance.assistance_date.strftime("%d/%m/%Y"),
+                        from_to, assistance.tutor, ' ', assistance.personal_code.to_s,
+                        received_by, delivered_by
+                    ]
+        end
+        rows.each do |row|
+            sheet.add_row row, types: [nil, nil, nil, nil, nil, :string, nil, nil]
+        end
+
+    end
+end

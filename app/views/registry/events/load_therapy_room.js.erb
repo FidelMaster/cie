@@ -1,0 +1,3 @@
+$("#room_container").html('<%= escape_javascript render(partial: "therapy_room", locals: {therapy_room: @therapy_room, selected_room_id: @selected_room_id}) %>');
+$(".container.spinner").hide();
+

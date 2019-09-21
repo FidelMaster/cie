@@ -1,0 +1,152 @@
+<%content_for :dialog do%>
+  <%= form_tag registry_employees_path, method: "get" do %>
+
+
+    <!-- Trigger the modal with a button -->
+
+    <%=filter_button_tag%>
+
+    <!-- Modal -->
+    <div id="ModalFilter" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Filtrar Colaboradores</h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+                <%= label_tag "Colaborador", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                  <%= collection_select(:filter, :employee, Registry::Employee.all.where(:active => true), :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                </div>
+              </div>
+              <br><br>
+              <div class="form-group">
+                <%= label_tag "Cargo", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                  <%= collection_select(:filter, :employee_position, Registry::EmployeePosition.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                </div>
+              </div>
+              <br><br>
+              <div class="form-group">
+                <%= label_tag "Colaborador activo", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                  <%= check_box(:filter, :active, {:class=>"flat", :checked=>"checked"}, "yes", "no")%>
+                </div>
+              </div>
+          </div>
+          <br><br>
+          <div class="modal-footer">
+            <!--data-dismiss="modal"-->
+            <a type="button" href="<%=registry_employees_path%>" class="btn btn-default">Quitar Filtros</a>
+            <button type="submit" class="btn btn-default">Filtrar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+<%end%>
+
+
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+        RRHH
+      </div>
+    <div class="x_title">
+      <h2>Colaboradores</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%=content_for :dialog%>
+        </li>
+        <li>
+          <%= link_to(new_resource_icon,new_registry_employee_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+              <div class="digg_pagination">
+                <div class="pagination_pages">
+                  <%= will_paginate @registry_employees, :container => false %>
+                </div>
+                <div class="page_info">
+                  <%= page_entries_info @registry_employees, :model => "registry_employee" %>
+                </div>
+              </div>
+              <%= form_tag destroy_multiple_registry_employees_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th>
+                        <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title">Nombre</th>
+                      <th class="column-title">Cargo</th>
+                      <th class="column-title">Fecha de inicio</th>
+                      <th class="column-title text-center">Activo</th>
+                      <th class="column-title text-center">Coordinador</th>
+                      <th class="column-title text-center" colspan="2">Calendario</th>
+                      <th class="column-title no-link last text-center" colspan="3">Action</th>
+                      </th>
+                      <th class="bulk-actions" colspan="10">
+                        <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i></button>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @registry_employees.each_with_index do |registry_employee, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td class="center">
+                              <input type="checkbox" name="registry_employee_ids[]" id="registry_employee_id_<%=registry_employee.id%>" value="<%=registry_employee.id%>" class="flat deletable">
+                        </td>
+
+                        <td><%= registry_employee.display_name %></td>
+                        <td><%= registry_employee.registry_employee_position.name %></td>
+                        <td><%= registry_employee.start_date_formatted %></td>
+                        <td><%= registry_employee.active.present? ? check_resource_icon : "" %></td>
+                        <% employee_record = Registry::Employee.where(:id => registry_employee.boss_id).first %>
+                        <td><%= employee_record.present? ? employee_record.display_name : "" %></td>
+
+                        <td class="split_left_icon_section last  text-center"><%= link_to calendar_resource_icon, registry_events_path(:"filter[employee]" => registry_employee.id) %></td>
+                        <td class="last  text-center"><%= link_to calendar_plus_resource_icon, new_registry_event_path(:"filter[employee]" => registry_employee.id) %></td>
+
+                        <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, registry_employee %></td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, edit_registry_employee_path(registry_employee) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, registry_employee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

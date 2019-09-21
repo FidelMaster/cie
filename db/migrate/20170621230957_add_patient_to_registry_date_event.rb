@@ -1,0 +1,5 @@
+class AddPatientToRegistryDateEvent < ActiveRecord::Migration[5.0]
+  def change
+    add_reference :registry_date_events, :registry_patient, foreign_key: true
+  end
+end

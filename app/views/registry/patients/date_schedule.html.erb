@@ -1,0 +1,47 @@
+<% if params[:add_date].present? && Utility.is_true?(params[:add_date])%>
+	<script>
+		$(".container.spinner").show();
+		$.getScript('/registry/date_events/new?patient_id='+<%=params[:patient_id]%>, function() {
+			$('.date-range-picker ').val(moment().format("DD/MM/YYYY HH:mm") + ' - ' + moment().format("DD/MM/YYYY HH:mm"))
+			date_range_picker();
+			init_select2();
+			$('.start_hidden').val(moment().format('DD/MM/YYYY HH:mm'));
+			$('.end_hidden').val(moment().format('DD/MM/YYYY HH:mm'));
+		});
+	</script>
+<% end %>
+<script>
+	var patient_id = function(){
+		return <%= params[:patient_id] %>
+	}
+</script>
+<div class="right_col" role="main">
+	<div class="">
+
+		<div class="clearfix"></div>
+		<div class="title_page">
+	      Registro
+	    </div>
+	    <div class="x_title">
+			<h2>Citas del Paciente: <%=@registry_patient.display_name%>  <%= link_to(patient_button_icon,registry_patients_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Pacientes", :class=> "plus_header_container")%></h2>
+			
+			<div class="clearfix"></div>
+		</div>
+
+		<div class="row">
+
+			<div class="clearfix"></div>
+
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					
+
+					<div class="x_content">
+						<div class="full_calendar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id='remote_container'></div>

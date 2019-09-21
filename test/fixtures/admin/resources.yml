@@ -1,0 +1,29 @@
+# == Schema Information
+#
+# Table name: admin_resources
+#
+#  id                     :integer          not null, primary key
+#  name                   :string
+#  description            :text
+#  model                  :string
+#  module                 :string
+#  admin_resource_type_id :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  model: MyString
+  module: MyString
+  admin_resource_type: one
+
+two:
+  name: MyString
+  description: MyText
+  model: MyString
+  module: MyString
+  admin_resource_type: two

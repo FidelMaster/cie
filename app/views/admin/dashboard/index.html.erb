@@ -1,0 +1,58 @@
+<div class="right_col" role="main">
+	<div class="new_container_resumen">
+
+		<!-- CAMBIO LESTHER -->
+		<!-- AGREGAR RESUMEN -->
+		<div class="resumen">
+			<div>
+				<div class="title_resumen">
+					Resumen <span class="regular_font">(Citas de <%=I18n.l(Date.today, :format => :month_format)%>)</span>
+				</div>
+
+			</div>
+			<div class="container_resumen">
+				<div>
+					<div class="inline_divs fs_0">
+		    			<div class="w30p">
+		    				<div class="number_view"><%=todays_date%></div>
+		    				<div class="info_number inline_divs">
+		    					<div class="circle m_right_10 point_visual bck_green v_mid"></div>
+		    					<div class="info_text_number ellipsis v_mid">Citas del día</div>
+		    				</div>
+		    			</div>
+		    			<div class="w40p">
+		    				<div class="number_view"><%=week_date%></div>
+		    				<div class="info_number inline_divs">
+		    					<div class="circle m_right_10 point_visual bck_blue v_mid"></div>
+		    					<div class="info_text_number ellipsis v_mid">Citas de la semana</div>
+		    				</div>
+		    			</div>
+		    			<div class="w30p">
+		    				<div class="number_view"><%=month_date%></div>
+		    				<div class="info_number inline_divs">
+		    					<div class="circle m_right_10 point_visual bck_gray v_mid"></div>
+		    					<div class="info_text_number ellipsis v_mid">Citas del Mes</div>
+		    				</div>
+		    			</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<!-- CAMBIO LESTHER -->
+		<!-- AGREGAR -->
+		<div class="title_page">
+			Dashboard
+		</div>
+
+		<% if notice.present?%>
+		  <div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+		    <%= notice %>
+		  </div>
+		<% end %>
+	</div>
+</div>
+<div id='remote_container'></div>

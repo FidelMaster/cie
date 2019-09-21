@@ -1,0 +1,82 @@
+<div class="right_col" role="main">
+	<div class="new_container_resumen">
+
+		<!-- CAMBIO LESTHER -->
+		<!-- AGREGAR RESUMEN -->
+		<!-- Devherrera -->
+		
+		<div class="resumen">
+			<div>
+				<div class="title_resumen">
+					Resumen <span class="regular_font">(Citas de <%=I18n.l(Date.today, :format => :month_format)%>)</span>
+				</div>
+				<!--<div class="action_container">	
+					<div class="">
+						<li class="dropdown">
+							<a class="dropdown-toggle action_button_gray" data-toggle="dropdown" aria-expanded="false" href="#">
+							
+							</a>
+		                    <ul class="dropdown-menu list-unstyled msg_list" role="menu">
+		                        <li>
+		                        	<a href="#">
+		                            	<span class="image">
+		                                	<span class="message">Más opciones</span>
+		                            	</span>
+		                        	</a>
+		                        </li>
+		                        <li>
+		                            <div class="text-center">
+		                            <a href="http://cie.bi.com.ni/registry">
+		                                <strong>Ocultar </strong>
+		                                
+		                            </a></div>
+		                        </li>
+		                    </ul>
+		                </li>
+					</div>
+
+				</div>-->
+
+			</div>
+			<div class="container_resumen">
+				<%=render "/shared/resumen"%>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<!-- CAMBIO LESTHER -->
+		<!-- AGREGAR -->
+		<div class="title_page">
+			Dashboard
+		</div>
+
+		<div class="x_title">
+			<h2>Citas en Agenda</h2>
+			
+			<div class="clearfix"></div>
+		</div>
+
+		<% if notice.present?%>
+		  <div class="alert alert-success">
+		    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+		    <%= notice %>
+		  </div>
+		<% end %>
+
+
+
+		
+		<div class="row">
+			<div class="clearfix"></div>
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
+						<div class="full_calendar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id='remote_container'></div>

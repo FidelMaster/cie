@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: registry_employees
+#
+#  id                            :integer          not null, primary key
+#  first_name                    :string
+#  last_name                     :string
+#  birth_date                    :date
+#  registry_employee_position_id :integer
+#  start_date                    :date
+#  active                        :boolean
+#  avatar                        :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  email                         :string
+#  boss_id                       :integer
+#  registry_therapy_group_id     :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  last_name: MyString
+  birth_date: 2017-06-07
+  registry_employee_position: one
+  start_date: 2017-06-07
+  active: false
+  avatar: MyString
+
+two:
+  first_name: MyString
+  last_name: MyString
+  birth_date: 2017-06-07
+  registry_employee_position: two
+  start_date: 2017-06-07
+  active: false
+  avatar: MyString

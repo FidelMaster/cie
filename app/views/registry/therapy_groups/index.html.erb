@@ -1,0 +1,82 @@
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+        Terapias
+      </div>
+    <div class="x_title">
+      <h2>Grupos de Terapia</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%= link_to(new_resource_icon,new_registry_therapy_group_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+              <div class="digg_pagination">
+                <div class="pagination_pages">
+                  <%= will_paginate @registry_therapy_groups, :container => false %>
+                </div>
+                <div class="page_info">
+                  <%= page_entries_info @registry_therapy_groups, :model => "registry_therapy_group" %>
+                </div>
+              </div>
+              <%= form_tag destroy_multiple_registry_therapy_groups_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th>
+                        <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title">Nombre</th>
+                      <th class="column-title">Salones en este grupo</th>
+                      <th class="column-title no-link last text-center" colspan="3">Action</th>
+                      </th>
+                      <th class="bulk-actions" colspan="7">
+                        <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i></button>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @registry_therapy_groups.each_with_index do |registry_therapy_group, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td class="center">
+                                    <input type="checkbox" name="registry_therapy_group_ids[]" id="registry_therapy_group_id_<%=registry_therapy_group.id%>" value="<%=registry_therapy_group.id%>" class="flat deletable">
+                              </td>
+
+                        <td><%= registry_therapy_group.name %></td>
+                        <td><%= registry_therapy_group.registry_therapy_rooms.count %></td>
+                        <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, registry_therapy_group %></td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, edit_registry_therapy_group_path(registry_therapy_group) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, registry_therapy_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

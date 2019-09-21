@@ -1,0 +1,2 @@
+module Registry::AgeRangesHelper
+end

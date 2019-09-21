@@ -1,0 +1,6 @@
+<% if municipalities.present?%>
+	<%selected_municipality = @selected_municipality.present? ? {include_blank: true, :required=>"required", selected: @selected_municipality} : {include_blank: true, :required=>"required"}%>
+	<%= collection_select :registry_patient, :registry_municipality_id, municipalities, :id, :display_name, selected_municipality, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<% else %>
+	<%= collection_select :registry_patient, :registry_municipality_id, Array.new, :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<%end%>

@@ -1,0 +1,99 @@
+<style type="text/css">
+
+  #label-color {
+    width:1%;
+    padding:10px 11px;
+    margin:0 auto;
+    border:2px solid #a1a1a1;
+    border-radius:100%;
+  }
+</style>
+
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    
+    <div class="title_page">
+      Terapias
+    </div>
+    <div class="x_title">
+      <h2>Tipos de terapia</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%= link_to(new_resource_icon,new_registry_therapy_type_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+              <div class="digg_pagination">
+                <div class="pagination_pages">
+                  <%= will_paginate @registry_therapy_types, :container => false %>
+                </div>
+                <div class="page_info">
+                  <%= page_entries_info @registry_therapy_types, :model => "registry_therapy_type" %>
+                </div>
+              </div>
+              <%= form_tag destroy_multiple_registry_therapy_types_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th>
+                        <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title">Nombre</th>
+                      <th class="column-title">Precio INSS</th>
+                      <th class="column-title">Precio Privado</th>
+                      <th class="column-title">Color de etiqueta</th>
+                      <th class="column-title no-link last text-center" colspan="3">Action</th>
+                      </th>
+                      <th class="bulk-actions" colspan="5">
+                        <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i></button>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @registry_therapy_types.each_with_index do |registry_therapy_type, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td class="center">
+                          <input type="checkbox" name="registry_therapy_type_ids[]" id="registry_therapy_type_id_<%=registry_therapy_type.id%>" value="<%=registry_therapy_type.id%>" class="flat deletable">
+                        </td>
+
+                        <td><%= registry_therapy_type.name %></td>
+                        <td><%= registry_therapy_type.inss_therapy_price.to_f %></td>
+                        <td><%= registry_therapy_type.private_therapy_price.to_f %></td>
+                        <td><div id="label-color" style="background-color: <%= registry_therapy_type.label_color %>" ></div></td>
+                        <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, registry_therapy_type %></td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, edit_registry_therapy_type_path(registry_therapy_type) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, registry_therapy_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

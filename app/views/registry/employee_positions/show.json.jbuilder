@@ -1,0 +1,1 @@
+json.partial! "registry_employee_positions/registry_employee_position", registry_employee_position: @registry_employee_position

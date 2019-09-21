@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset='utf-8' />
+	<%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+	<%= wicked_pdf_stylesheet_link_tag "asistencia" -%>
+	<%= wicked_pdf_javascript_include_tag "number_pages" %>
+	<style>
+		.alwaysbreak { page-break-before: always; }
+		.nobreak:before { clear:both; }
+		.nobreak { page-break-inside: avoid; }
+		thead { display: table-header-group }
+		tfoot { display: table-row-group }
+		tr { page-break-inside: avoid }
+	</style>
+</head>
+<body onload='number_pages'>
+	<div id="header">
+		
+			
+		<div style="text-align: center;">
+			<%= wicked_pdf_image_tag 'CIE_logo.png', width: 100 %>
+			<h4>Programa eduterapeutico</h4>
+		</div>
+			
+		<span style="float:left; text-align:right">
+		Período <em><%=@start_date.strftime("%d/%m/%y") %> - <%=@end_date.strftime("%d/%m/%y")%></em>
+		<% if @invoice_code %>
+			Recibo # - <%= @invoice_code %>
+		<% end %>
+		</span>
+	</div>
+	<div id="content">
+		<main>
+			<% total_estudiante = 0 %>
+			<% total_factura = 0 %>
+			<% start = Date.new.beginning_of_day + 7.hours%>
+			<% ending = Date.new.end_of_day - 6.hours %>
+			
+					
+					<%# registry_events = Registry::Event.filter(:patient => patient.id) %>
+
+					<%# calendar_registry_events = registry_events.flat_map{ |e| e.calendar_events(params.fetch(:start_date, params[:filter][:start_date]).to_date, params[:filter][:end_date].to_date)} %>
+
+			<table class="table table-striped nobreak" style="border: 1px solid #ddd;">
+				<thead>
+					<tr>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Item</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Nombres</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Apellidos</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Edad</th>
+
+						<%#if patient.patient_type == "INSS"%>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">No. INSS Beneficiario</th>
+						<%#end%>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Terapia</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Horas de Terapia</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Costo de Hora</th>
+						<th style="border: 0.5px solid black; color: black !important; background-color: #eaeae1;">Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% index = 0 %>
+					<% @patients.each do |patient| %>
+						<% terapias = @services.present? ? Registry::TherapyType.where(:id => @services) : Registry::TherapyType.all %>
+						<% terapias.each do |therapy|%>
+							<% therapy_hour = patient.hours_to_invoice_with_therapy(@start_date,@end_date, therapy.id, @calendar_registry_events) %>
+
+							<% if therapy_hour > 0 %>
+								<tr>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= index += 1 %></td>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= patient.first_name %></td>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= patient.last_name %></td>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= patient.age %></td>
+									<%#if patient.patient_type == "INSS"%>
+										<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= patient.registry_treatment_requirement.beneficiary_social_security_number %></td>
+									<%#end%>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px; 
+										background-color: <%= therapy.label_color %>
+									"><%= therapy.display_name %></td>
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%= therapy_hour %> hr</td>
+									
+									<%# patient_type_map contains ["Privado","INSS"]%>
+									<% if patient.patient_type_map[0].include? patient.patient_type %>
+										<% hour_price = therapy.private_therapy_price %>
+									<% else %>
+										<% hour_price = therapy.inss_therapy_price%>
+									<% end %>
+
+									<% hour_price = 0 if patient.patient_type.blank? %>
+
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%=number_to_currency(hour_price.to_f)%></td>
+
+									<td style="padding: 2px; text-align: left; border: 0.5px solid black; font-size: 14px;"><%=number_to_currency(therapy_hour * hour_price.to_f) %></td>
+									<%total_factura += therapy_hour * hour_price.to_f%>
+									<%total_estudiante += therapy_hour * hour_price.to_f%>
+								</tr>
+							<% end %>
+						<% end %>
+					<% end %>
+
+					<%patient_shown = false%>
+					
+				</tbody>
+			</table>			
+			<div id="notices">
+				<div>Nota:</div>
+				<div class="notice"></div>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

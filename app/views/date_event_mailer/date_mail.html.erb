@@ -1,0 +1,17 @@
+
+  <p>Estimado(a) <strong><%= @person.display_name %></strong></p>
+  <br />
+  <p>Se ha registrado una progración de cita / evaluación para el paciente
+  <% if @date_event.registry_patient %>
+    <strong><%= @date_event.registry_patient.display_name %></strong>
+  <% else %>
+    <strong><%= @date_event.child_name %></strong>
+  <% end %>
+  , visualizar este evento en sistema de registro.</p>
+  <br />
+  <p>**fecha de cita / evaluación : <%= @date_event.start_time.strftime("%d/%m/%y %H:%M") %></p>
+  <br />
+  <p><h1>CIE</h1></p>
+  <p><strong>Nota</strong><br>
+  -- Este es un mensaje automatico, no responder</p>
+

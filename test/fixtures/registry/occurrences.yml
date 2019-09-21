@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: registry_occurrences
+#
+#  id                :integer          not null, primary key
+#  registry_event_id :integer
+#  date              :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  registry_event: one
+  date: 2018-11-06 15:35:25
+
+two:
+  registry_event: two
+  date: 2018-11-06 15:35:25

@@ -1,0 +1,21 @@
+<div class="right_col" role="main">
+	<div class="">
+		<div class="title_page">
+	      Administración
+	    </div>
+		<div class="x_title">
+			<h2>Editar Usuario (<%=@admin_cie_user.name%>)</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					
+					<div class="x_content">
+						<%= render 'form', {admin_cie_user: @admin_cie_user, url: admin_cie_user_path(@admin_cie_user.id)}%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

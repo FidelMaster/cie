@@ -1,0 +1,325 @@
+<%= form_for(registry_patient, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_patient.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_patient.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_patient.one")%></h2>
+
+      <ul>
+        <% registry_patient.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :first_name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :last_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Apellido <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :last_name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :birth_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Nacimiento <span class="required">*
+    <%end%> 
+    <fieldset class="col-md-6 col-sm-6 col-xs-12">
+      <div class="control-group">
+        <div class="controls">
+          <div class="xdisplay_inputx form-group has-feedback">
+            <%= f.text_field :birth_date, :class=>"form-control datepicker birth_date", :required=>"required", :placeholder=>"dd/mm/yyyy"%>
+            <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <% if !f.object.new_record? %>
+        <script>
+          birth_date = "<%=f.object.birth_date_formatted%>"
+        </script>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :patient_type, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Tipo de Paciente:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.select :patient_type, f.object.patient_type_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1",:required=>"required"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :medical_start_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Alta:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :medical_start_date, :class=>"form-control col-md-7 col-xs-12 start_date_empty_datepicker", :placeholder=>"dd/mm/yyyy"%>
+    </div>  
+  </div>
+  <% if !f.object.new_record? && f.object.medical_start_date.present?%>
+    <script>
+      start_medical_date = "<%=f.object.start_medical_date_formatted%>"
+    </script>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :gender, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Sexo
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.select :gender, Registry::Patient.gender_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1", :required=>"required"} %>
+    </div>
+  </div>
+
+  <% unless f.object.new_record? %>
+    <div class="item form-group">
+      <%= f.label :schedule, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Horario
+      <%end%> 
+      
+      <label class="control-label"> 
+        <% unless f.object.schedule.first.nil? && f.object.schedule.last.nil?  %>
+          <%= f.object.schedule.first + ' - ' + f.object.schedule.last %> 
+        <% end %>
+      </label>
+      
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :therapy_hours_per_day, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Horas de terapia por día
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :therapy_hours_per_day, value: f.object.schedule.count, class: "form-control col-md-7 col-xs-12 numeric-input-validated", type: "number" %>
+    </div>
+  </div>
+
+  
+
+  <div class="item form-group">
+    <%= f.label :mother_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Identificación de la madre
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :mother_id, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :mother_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre de la madre
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :mother_name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :father_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Identificación del padre
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :father_id, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :father_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre del padre
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :father_name, :class=>"form-control col-md-7 col-xs-12", :required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :first_guardian_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Identificación del tutor 1
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :first_guardian_id, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :first_guardian_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre del tutor 1
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :first_guardian_name, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :second_guardian_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Identificación del tutor 2
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :second_guardian_id, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :second_guardian_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre del tutor 2
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :second_guardian_name, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :email, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Correo electrónico
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :email, :class=>"form-control col-md-7 col-xs-12", :type=>"email" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :phone, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Teléfono
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :phone, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :mobile_phone, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Celular
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :mobile_phone, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_condition_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Condición Médica<span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_condition_id, Registry::Condition.all, :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1", :required=>"required"} %>
+    </div>
+  </div>
+  
+  <div class="item form-group">
+    <%= f.label :reference_to_center, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Información de quien refirió al centro <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :reference_to_center, :class=>"form-control col-md-7 col-xs-12", :required=>"required" %>
+    </div>
+  </div>
+
+
+  <div class="item form-group">
+    <%= f.label :registry_department_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Departamento <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_department_id, Registry::Department.all, :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_municipality_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Municipio <span class="required">*
+    <%end%> 
+    <div id="municipalities_container" class="col-md-6 col-sm-6 col-xs-12">
+      <%= render "municipalities", :municipalities => nil %>
+    </div>
+  </div>
+
+  <%# New requirement October 30th, 2018 %>
+  <div id="districts_container" class="item form-group" 
+  style="<%= @registry_patient.registry_municipality && @registry_patient.registry_municipality.name == 'Managua' ? 'display: block;' : 'display: none;' %>">
+    <%= f.label :districts, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Distrito
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :district, Registry::Patient.districts, :to_s, :to_s, {include_blank: 'Seleccionar un distrito', class: 'select2_single form-control', tabindex: "-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :address, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Dirección <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_area :address, :class=>"form-control col-md-7 col-xs-12", :required=>"required"%>
+    </div>
+  </div>  
+
+  <div class="item form-group">
+    <%= f.label :comments, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Observaciones
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_area :comments, :class=>"form-control col-md-7 col-xs-12" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", registry_patients_path, :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>
+
+
+<script>
+
+$(document).ready(function(){
+
+  $("#registry_patient_district").select2();
+
+  var municipalityID = "<%= @registry_patient.present? ? @registry_patient.registry_municipality_id : nil%>";
+  value = $("#registry_patient_registry_department_id").val();
+  if (value != "") {
+    $(".container.spinner").show();
+    $.getScript('/registry/patients/load_municipalities?registry_department_id=' + value + '&registry_municipality_id=' + municipalityID, function() {
+      init_select2();
+    });
+  }
+
+  $("#registry_patient_registry_department_id").on("change", function(){
+    
+    value = $(this).val();
+    if (value != "") {
+      $(".container.spinner").show();
+      $.getScript('/registry/patients/load_municipalities?registry_department_id=' + value + '&registry_municipality_id=' + municipalityID, function() {
+        init_select2();
+      });
+    }
+  });
+
+  // function for new requirement October 30th, 2018
+
+  $(document.body).on("change", "#registry_patient_registry_municipality_id", function() {
+    municipality = $("#registry_patient_registry_municipality_id :selected").text();
+    if (municipality == 'Managua') {
+      $("#districts_container").css("display", "block");
+    } else {
+      $("#districts_container").css("display", "none");
+    }
+  });
+});
+
+
+</script>

@@ -1,0 +1,7 @@
+<% if params[:week] %>
+	$("#week_calendar_container").html("<%= escape_javascript render(partial: "week_calendar", locals: {events: @events}) %>");
+	$(".container.spinner").hide();
+<% else %>
+	$("#month_calendar_container").html("<%= escape_javascript render(partial: "calendar", locals: {events: @events}) %>");
+	$(".container.spinner").hide();
+<% end %>

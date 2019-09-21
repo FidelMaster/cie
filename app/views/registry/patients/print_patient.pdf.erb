@@ -1,0 +1,155 @@
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<%# wicked_pdf_stylesheet_link_tag "pdf" -%>
+    <%# wicked_pdf_stylesheet_link_tag "bootstrap" -%>
+	<%# wicked_pdf_stylesheet_link_tag "s240_base" -%>
+    <%# wicked_pdf_stylesheet_link_tag "s240_body" -%>
+    <style>
+        .alwaysbreak { page-break-before: always; }
+        .nobreak:before { clear:both; }
+        .nobreak { page-break-inside: avoid; }
+        /* html,body{
+            font-family: 'Lato', sans-serif;
+            color: #005fd4;
+            color: #00479e;
+        } */
+    </style>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+    <div id="header">
+        <%= wicked_pdf_image_tag 'logo_cie.png', width: 70 %>
+        <span style="float:right; text-align:right">
+			Impreso el: <%= Date.today.strftime("%d/%m/%Y") %>
+            por <%= current_cie_user.name %>
+		</span>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8">
+                <h3><%= @registry_patient.display_name %></h3>
+            </div>
+            <div class="col-xs-4">
+                <%# wicked_pdf_image_tag @registry_patient.image_source("child_avatar"), class: "profile_pic circle" %>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <h4>Padre: <%= @registry_patient.father_name %></h4>
+
+            <h4>Madre: <%= @registry_patient.mother_name %></h4>
+
+            <h4>Género: <%= @registry_patient.gender %></h4>
+
+            <h4>Condición Médica: <%= @registry_patient.registry_condition.display_name %></h4>
+            
+            <h4>Fecha de nacimiento: <%= @registry_patient.birth_date_formatted %></h4>
+        </div>
+        <div class="col-xs-6">
+            <h4>Correo electrónico de contacto: </h4>
+            <h4><%= @registry_patient.email %></h4>
+
+            <h4>Teléfono</h4>
+            <ol style="list-style-type: none;">
+            <% if @registry_patient.phone.present? %>
+                <li><h4><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i> <%= @registry_patient.phone %></h4></li>
+            <% end %>
+            <% if @registry_patient.mobile_phone.present? %>
+                <li><h4><i class="glyphicon glyphicon-phone" aria-hidden="true"></i> <%= @registry_patient.mobile_phone %></h4></li>
+            <% end %>
+            </ol>
+
+            <h4>Referido por: <%= @registry_patient.reference_to_center %></h4>
+
+            <h4>Departamento: <%= @registry_patient.registry_department.display_name %></h4>
+            
+            <h4>Municipio: <%= @registry_patient.registry_municipality.display_name %></h4>
+            <% if @registry_patient.registry_municipality.display_name == 'Managua' %>
+                <h4>Distrito: <%= @registry_patient.district %></h4>
+            <% end %>
+        </div>
+    
+    </div>
+    
+    <h3>Ficha clínica</h3>
+    <div class="row">
+        <div class="col-xs-6">
+            
+            <h4>Condición: <%= @registry_patient.registry_condition.display_name %></h4>
+            <h4>Tipo de paciente: <%= @registry_patient.patient_type %> </h4>
+            <h4>Fecha de alta: <%= @registry_patient.start_medical_date_formatted %> </h4>
+            <% if @registry_patient.medical_end_date.present? %>
+                <h4>Fecha de baja: <%= @registry_patient.end_medical_date_formatted %> </h4>
+            <% end %>
+            <h4>Estado del paciente: <%= @registry_patient.patient_state %> </h4>
+        </div>
+        <div class="col-xs-6">
+            <h4>Cantidad de horas por tipo de terapia semanal</h4>
+            <% @medical_record.each do |medical_record| %>
+                <h5>
+                    <%= medical_record[:therapy_name] + ': ' + medical_record[:weekly_hours] %>
+                </h5>
+            <% end %>
+        </div>
+    </div>
+    
+
+    
+    <h3>Requerimientos de ingreso</h3>
+    <div class="row">
+        <div class="col-xs-6">
+            <h4>Número de seguro social de tutor/padre/madre: <%= @registry_patient.registry_treatment_requirement.insured_tutor_number %></h4>
+            <h4>Número de seguro social del beneficiario: <%= @registry_patient.registry_treatment_requirement.beneficiary_social_security_number %></h4>
+            <h4>
+                Epicrisis: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.epicrisis) %>
+            </h4>
+            <h4>
+                Partida de nacimiento: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.birth_certificate) %>
+            </h4>
+            <h4>
+                Carnet de beneficiario: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.beneficiary_child_license) %>
+            </h4>
+            <h4>
+                Cédula de mamá o papá: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.active_secured_parent_id_card) %>
+            </h4>
+
+        </div>
+        <div class="col-xs-6">
+            <h4>
+                    Carnet de asegurado de mamá o papá: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.active_secured_parent_license) %>
+            </h4> 
+            <h4>
+                    Comprobante de pago y derecho (Colilla del INSS): <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.payment_receipt_inss) %>
+            </h4> 
+            <h4>
+                    Carta de solicitud: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.entrance_letter) %>
+            </h4>
+            <h4>
+                    Consentimiento informado: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.informed_consent) %>
+            </h4>
+            <h4>
+                    Permiso para fotografías: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.permission_to_take_photos) %>
+            </h4>
+            <h4>
+                    Seguro escolar: <%= print_yes_or_no(@registry_patient.registry_treatment_requirement.school_insurance) %>
+            </h4>
+        </div>
+    </div>
+    
+    <br>
+
+    <% unless @registry_patient.registry_treatment_requirement.other_studies.blank? %>
+        <h4>
+            Otros estudios
+        </h4>
+        <p>
+            <%= @registry_patient.registry_treatment_requirement.other_studies %>
+        </p>
+    <% end %>
+    
+    
+</body>
+</html>

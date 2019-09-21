@@ -1,0 +1,272 @@
+<%= form_for(registry_patient, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_patient.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_patient.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_patient.one")%></h2>
+
+      <ul>
+        <% registry_patient.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre:
+    <%end%> 
+      <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      <%= registry_patient.display_name %>
+    <%end%>
+  </div>
+
+  <div class="item form-group">
+     <%= f.label :registry_condition_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Condición:
+    <%end%> 
+      <%= f.label :registry_condition_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      <%= registry_patient.registry_condition.display_name %>
+    <%end%>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :patient_type, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Tipo de Paciente:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.select :patient_type, f.object.patient_type_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1",:required=>"required"} %>
+    </div>
+  </div>
+  
+  <div class="item form-group">
+    <%= f.label :medical_start_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Alta:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :medical_start_date, :class=>"form-control col-md-7 col-xs-12 start_date_empty_datepicker", :placeholder=>"dd/mm/yyyy"%>
+    </div>  
+  </div>
+  <% if !f.object.new_record? && f.object.medical_start_date.present?%>
+    <script>
+      start_medical_date = "<%=f.object.start_medical_date_formatted%>"
+    </script>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :medical_end_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Baja:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :medical_end_date, :class=>"form-control col-md-7 col-xs-12 end_date_empty_datepicker", :placeholder=>"dd/mm/yyyy"%>
+    </div>
+  </div>
+
+  <% if !f.object.new_record? && f.object.medical_end_date.present?%>
+    <script>
+      end_medical_date = "<%=f.object.end_medical_date_formatted%>"
+    </script>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :patient_state, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Estado del Paciente:
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.select :patient_state, f.object.patient_state_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1",:required=>"required"} %>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <%=f.label :child_avatar, :class=>"control-label col-md-3 col-sm-3 col-xs-12"%>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.file_field :child_avatar, :placeholder => "Avatar" %>
+    </div>
+  </div>
+
+
+  <div class="clearfix"></div>
+  <hr>
+  
+  <%= f.label :registry_medical_records, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Cantidad de horas por tipo de terapia semanal:
+  <%end%>
+  <div class="clearfix"></div>
+  <br>
+  <%= f.fields_for :registry_medical_records do |ff| %>
+    <div class="item form-group">
+      <%= ff.label :registry_therapy_type_id, :class=>"control-label col-md-1 col-sm-1 col-xs-12" do %> 
+        <%= ff.index.to_i + 1 %>
+      <%end%>
+      <div class="col-md-2 col-sm-3 col-xs-12">
+        <%= ff.collection_select :registry_therapy_type_id, Registry::TherapyType.all, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1", :disabled=>"disabled"} %>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <%= ff.hidden_field :registry_therapy_type_id%>
+        <%= ff.text_field :week_therapy_hours, :class=>"form-control col-md-7 col-xs-12 numeric-input-validated",:required=>"required", :type=>"number"%>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <% if ff.object.persisted? %>
+          <%= ff.check_box :_destroy, :class=>"flat" %>
+          <%= ff.label :_destroy, "Eliminar" %>
+        <% end %>
+      </div>
+    </div>
+
+  <% end %>
+
+  <div class="clearfix"></div>
+  <hr>
+  <%= f.label :registry_treatment_requirement, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Requerimientos de ingreso:
+  <%end%>
+  <div class="clearfix"></div>
+  <br>
+  <%= f.fields_for :registry_treatment_requirement do |ff| %>
+    <div class="item form-group">
+      <%= f.label :insured_tutor_number, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Número de seguro social de Tutor / Padre / Madre:
+      <%end%> 
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= ff.text_field :insured_tutor_number, :class=>"form-control col-md-7 col-xs-12"%>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :beneficiary_social_security_number, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Número de seguro social de beneficiario:
+      <%end%> 
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= ff.text_field :beneficiary_social_security_number, :class=>"form-control col-md-7 col-xs-12"%>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :epicrisis, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Epicrisis:
+      <%end%>
+      <div class="custom-control custom-radio">
+        <%= label_tag :epicrisis_true, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :epicrisis, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :epicrisis_false, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :epicrisis, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :birth_certificate, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Partida de nacimiento:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :birth_certificate, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :birth_certificate, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :birth_certificate, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :birth_certificate, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :beneficiary_child_license, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Carnet de beneficiario:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :beneficiary_child_license, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :beneficiary_child_license, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :beneficiary_child_license, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :beneficiary_child_license, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :active_secured_parent_id_card, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Cédula de mamá o papá:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :active_secured_parent_id_card, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :active_secured_parent_id_card, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :active_secured_parent_id_card, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :active_secured_parent_id_card, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :active_secured_parent_license, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Carnet de asegurado de mamá o papá:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :active_secured_parent_license, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :active_secured_parent_license, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :active_secured_parent_license, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :active_secured_parent_license, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :payment_receipt_inss, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Comprobante de pago y derecho (Colilla del INSS):
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :payment_receipt_inss, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :payment_receipt_inss, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :payment_receipt_inss, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :payment_receipt_inss, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+    <div class="item form-group">
+      <%= f.label :entrance_letter, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Carta de solicitud:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :entrance_letter, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :entrance_letter, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :entrance_letter, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :entrance_letter, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= f.label :informed_consent, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Consentimiento informado:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :informed_consent, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :informed_consent, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :informed_consent, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :informed_consent, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= f.label :permission_to_take_photos, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Permiso para tomar fotografías:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :permission_to_take_photos, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :permission_to_take_photos, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :permission_to_take_photos, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :permission_to_take_photos, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= f.label :school_insurance, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Seguro escolar:
+      <%end%> 
+      <div class="custom-control custom-radio">
+        <%= label_tag :school_insurance, 'Sí', class: 'custom-control-label' %>
+        <%= ff.radio_button :school_insurance, true, :class=>"form-control flat custom-control-input"%>
+        <%= label_tag :school_insurance, 'No', class: 'custom-control-label' %>
+        <%= ff.radio_button :school_insurance, false, class: "form-control flat custom-control-input" %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= f.label :other_studies, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Otros Estudios:
+      <%end%> 
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= ff.text_field :other_studies, :class=>"form-control col-md-7 col-xs-12"%>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", registry_patients_path, :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>

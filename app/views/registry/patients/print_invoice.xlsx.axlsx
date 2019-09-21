@@ -1,0 +1,45 @@
+wb = xlsx_package.workbook
+titles = ['Item', 'Nombres', 'Apellidos', 'Edad', '# INSS Beneficiario', 'Terapia', 'Hrs terapias recibidas', 'Costo $ x hora', 'Total']
+name_and_invoice = ['Facturación']
+if @invoice_code
+	name_and_invoice << @invoice_code
+end
+rows = Array.new
+wb.styles do |s|
+	cell_styles = s.add_style :fg_color=> "000000",
+                            :b => true,
+                            :bg_color => "eaeae1"
+	wb.add_worksheet(:name => "Facturación") do |sheet|
+		img = File.expand_path(Rails.root+'app/assets/images/CIE_logo.png', __FILE__)
+		sheet.add_image(:image_src => img)
+		sheet.add_row name_and_invoice
+		sheet.add_row titles, :style => cell_styles
+		index = 0
+		@patients.each do |patient|
+			terapias = @services.present? ? Registry::TherapyType.where(:id => @services) : Registry::TherapyType.all
+			terapias.each do |therapy|
+				therapy_hour = patient.hours_to_invoice_with_therapy(@start_date,@end_date, therapy.id, @calendar_registry_events)
+				if patient.patient_type_map[0].include? patient.patient_type
+					hour_price = therapy.private_therapy_price
+				else
+					hour_price = therapy.inss_therapy_price
+				end
+				hour_price = 0 if patient.patient_type.blank?
+		
+				if therapy_hour > 0
+					rows << [index += 1, patient.first_name, patient.last_name, patient.age, 
+					patient.registry_treatment_requirement.beneficiary_social_security_number.to_s, 
+					therapy.display_name,
+					therapy_hour,
+					number_to_currency(hour_price.to_f), number_to_currency(therapy_hour * hour_price.to_f)]
+				end
+			end
+		end
+		rows.each do |row|
+			sheet.add_row row
+		end
+		sheet.column_info.each do |column|
+			column.width = 18
+		end
+	end
+end

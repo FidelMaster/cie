@@ -1,0 +1,71 @@
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+      Administración
+    </div>
+    <div class="x_title">
+      <h2>Parámetros</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%= link_to(new_resource_icon,new_admin_parameter_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th class="column-title">Nombre</th>
+                      <th class="column-title">Precio / hora INSS</th>
+                      <th class="column-title">Precio / hora Privado</th>
+                      <th class="column-title">Evaluación / Cita</th>
+                      <th class="column-title no-link last text-center" colspan="3">Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @admin_parameters.each_with_index do |admin_parameter, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td><%= admin_parameter.name %></td>
+                        <td><%= admin_parameter.inss_hour_price %></td>
+                        <td><%= admin_parameter.private_hour_price %></td>
+                        <td>
+                          <% if admin_parameter.is_eval %>
+                            <span class="label label-success">Si</span>
+                          <% end %>
+                        </td>
+                        
+                        <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, admin_parameter %></td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, edit_admin_parameter_path(admin_parameter) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, admin_parameter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

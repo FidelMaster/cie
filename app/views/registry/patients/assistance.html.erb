@@ -1,0 +1,247 @@
+<%content_for :dialog_pdf do%>
+  <%= form_tag registry_patient_print_assistance_path(@registry_patient.id), method: "get", target: :_pdf, :format => [:pdf, :xlsx] do %>
+
+
+    <!-- Trigger the modal with a button -->
+    <%=print_button_tag("Imprimir Asistencia")%>
+
+    <!-- Modal -->
+    <div id="ModalFilterPDF" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Filtrar Asistencias</h4>
+          </div>
+          <div class="modal-body">
+                <div class="item form-group">
+                  <%= label :date_range, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  Fecha <span class="required">*
+                  <%end%> 
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= text_field :filer, :date_range, :class => "form-control input-sm only-date date-range" %>
+                  </div>
+                </div>
+                
+                <%= text_field :filter, :start_date, value: Date.today, type: :hidden, :class=>"start_hidden" %>
+                <%= text_field :filter, :end_date, value: Date.today, type: :hidden, :class=>"end_hidden" %>
+                <br><br>
+          </div>
+          <br><br>
+          <div class="modal-footer">
+            <!--data-dismiss="modal"-->
+            <a type="button" href="<%=registry_patient_assistance_path(@registry_patient.id)%>" class="btn btn-default">Cancelar</a>
+            <%= submit_tag "Previsualización", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ registry_patient_print_assistance_path(format: :pdf) }')", formtarget: :_blank %>
+            <%= submit_tag "XLS", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ registry_patient_print_assistance_path(format: :xlsx) }')" %>
+            <%= submit_tag "Ver PDF", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ registry_patient_print_assistance_path(format: :pdf) }')", formtarget: :_blank %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+<%end%>
+
+
+<div class="row">
+  <%content_for :dialog do%>
+    <div class="col-md-4">
+        <%= form_tag @registry_patient_assistance, method: "get" do %>
+
+
+          <!-- Trigger the modal with a button -->
+          <%=filter_button_tag%>
+
+          <!-- Modal -->
+          <div id="ModalFilter" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Filtrar Asistencias</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                      <%= label_tag "Colaborador", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                      <div class="col-md-8 col-sm-6 col-xs-12">
+                        <%= collection_select(:filter, :employee, Registry::Employee.all.where(:active => true), :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                      </div>
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                      <%= label_tag "Tutor", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                      <div class="col-md-8 col-sm-6 col-xs-12">
+                        <%= text_field :filter, :tutor, :class=>"form-control col-md-3 col-sm-3 col-xs-12" %>
+                      </div>
+                    </div>
+                    <br><br>
+                    <div class="item form-group">
+                      <%= label_tag "Fecha", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                      <div class="clearfix"></div>
+                      <div class="col-md-4 col-sm-6 col-xs-12">
+                        <%= select_tag "filter[operator]", options_for_select(FILTER_OPERATORS.collect), :include_blank => true, :class=>"select2_single form-control" %>
+                      </div>
+                      <fieldset class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="control-group">
+                          <div class="controls">
+                            <div class="xdisplay_inputx form-group has-feedback">
+                              <%= text_field :filter, :assist_date, :class=>"form-control empty_datepicker", :placeholder=>"dd/mm/yyyy"%>
+                              <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <br><br>
+                    <div class="item form-group">
+                      <%= label_tag "Fecha", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                      <div class="col-md-8 col-sm-6 col-xs-12">
+                        <%= select :filter, :scenario, Registry::PatientAssistance.scenario_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+                      </div>
+                    </div>
+
+                </div>
+                <br><br>
+                <div class="modal-footer">
+                  <!--data-dismiss="modal"-->
+                  <button type="submit" class="btn btn-default">Filtrar</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+    </div>
+    
+    <div class="col-md-4">
+      <%= link_to clean_filter_icon, registry_patient_assistance_path(@registry_patient) %>
+    </div>
+    
+  <%end%>
+</div>
+
+
+
+
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+      Registro
+    </div>
+
+    <div class="x_title">
+      <h2>Control de asistencias: <%=@registry_patient.display_name%> <%= link_to(patient_button_icon,registry_patients_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Pacientes", :class=> "plus_header_container")%></h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%=content_for :dialog%>
+        </li>
+        <li>
+          <%=content_for :dialog_pdf%>
+        </li>
+        <li>
+          <%= link_to(new_resource_icon,registry_patient_new_assistance_registration_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+                <div class="digg_pagination">
+                  <div class="pagination_pages">
+                    <%= will_paginate @registry_patient_assistances, :container => false %>
+                  </div>
+                  <div class="page_info">
+                    <%= page_entries_info @registry_patient_assistances, :model => "registry_patient_assistance" %>
+                  </div>
+                </div>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th class="column-title">No.</th>
+                      <th class="column-title">Fecha</th>
+                      <th class="column-title">Hora Entrada</th>
+                      <th class="column-title">Hora Salida</th>
+                      <th class="column-title">Padre/Madre/Tutor/Adicional</th>
+                      <th class="column-title">Número de Identificación</th>
+                      <th class="column-title">Colaborador/a que recibe</th>
+                      <th class="column-title">Colaborador/a que entrega</th>
+                      <th class="column-title no-link last text-center" colspan="2">Action</th>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @registry_patient_assistances.each_with_index do |registry_patient_assistance, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        
+                        <td><%= index + 1 %></td>
+                        <td><%= registry_patient_assistance.assistance_date.strftime('%d/%m/%Y')%></td>
+                        <td>
+                          <% unless registry_patient_assistance.received_at.nil? %>
+                            <%= registry_patient_assistance.received_at.strftime("%H:%M") %>
+                          <% else %>
+                            <%= registry_patient_assistance.assistance_date.strftime('%H:%M') %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <% unless registry_patient_assistance.delivered_at.nil? %>
+                            <%= registry_patient_assistance.delivered_at.strftime("%H:%M") %>
+                          <% else %>
+                            <%= registry_patient_assistance.assistance_date.strftime('%H:%M') %>
+                          <% end %>
+                        </td>
+                        <td><%= registry_patient_assistance.tutor %></td>
+                        <td><%= registry_patient_assistance.personal_code %></td>
+                        <td>
+                          <% if !registry_patient_assistance.employee_who_receives.nil? %>
+                            <%= registry_patient_assistance.employee_who_receives.display_name %>
+                          <% elsif !registry_patient_assistance.registry_employee.nil? %>
+                            <%= registry_patient_assistance.registry_employee.display_name %>
+                          <% else %>
+                            <%= '' %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <% if !registry_patient_assistance.employee_who_delivers.nil? %>
+                            <%= registry_patient_assistance.employee_who_delivers.display_name %>
+                          <% elsif !registry_patient_assistance.registry_employee.nil? %>
+                            <%= registry_patient_assistance.registry_employee.display_name %>
+                          <% else %>
+                            <%= '' %>
+                          <% end %>
+                        </td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, registry_patient_edit_assistance_registration_path(@registry_patient.id, registry_patient_assistance.id) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, registry_patient_destroy_assistance_path(@registry_patient.id, registry_patient_assistance.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

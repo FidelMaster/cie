@@ -1,0 +1,2 @@
+module Registry::TherapyGroupsHelper
+end

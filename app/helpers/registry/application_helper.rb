@@ -1,0 +1,2 @@
+module Registry::ApplicationHelper
+end

@@ -1,0 +1,4 @@
+$('.full_calendar').fullCalendar('removeEvents', [<%= @registry_date_event.id %>])
+$('.container_resumen').html('<%= j render "/shared/resumen" %>');
+$('.notification_sidebar').html('<%=alerts_menu%>');
+$('.modal').modal('hide');

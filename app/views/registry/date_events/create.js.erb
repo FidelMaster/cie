@@ -1,0 +1,9 @@
+$('.full_calendar').fullCalendar(
+  'renderEvent', 
+  $.parseJSON("<%=j render(@registry_date_event, format: :json).html_safe %>"),
+  true
+);
+$('.container_resumen').html('<%= j render "/shared/resumen" %>');
+$('.notification_sidebar').html('<%=alerts_menu%>');
+$('.modal').modal('hide');
+$(".container.spinner").hide();

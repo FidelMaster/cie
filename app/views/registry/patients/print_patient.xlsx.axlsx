@@ -1,0 +1,16 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: 'Asistencia') do |sheet|
+    sheet.add_row ["Nombre: #{@registry_patient.display_name}"]
+    sheet.add_row ["Padre: #{@registry_patient.father_name}", 
+    "Correo electrónico de contacto: #{@registry_patient.email}"]
+    sheet.add_row ["Madre: #{@registry_patient.mother_name}", 
+    "Género: #{@registry_patient.gender}"]
+    sheet.add_row ["Condición médica: #{@registry_patient.registry_condition.display_name}", 
+    "Teléfono: #{@registry_patient.phone + ' ' + @registry_patient.mobile_phone }"]
+    sheet.add_row ["Fecha de nacimiento: #{@registry_patient.birth_date_formatted}", "Referido por: #{@registry_patient.reference_to_center}"]
+    sheet.add_row ["Departamento: #{@registry_patient.registry_department.display_name}", 
+        "Municipio: #{@registry_patient.registry_municipality.display_name}"]
+    sheet.add_row ["Tipo de paciente: #{@registry_patient.patient_type}", 
+        "Fecha de alta: #{ @registry_patient.start_medical_date_formatted}"]
+    sheet.add_row ["Estado: #{@registry_patient.patient_state}"]
+end

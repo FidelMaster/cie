@@ -1,0 +1,27 @@
+<div class="right_col" role="main">
+	<div class="">
+		<div class="title_page">
+	      RRHH
+	    </div>
+		<div class="x_title">
+			<h2>Editar Colaborador: (<%=@registry_employee.display_name%>)</h2>
+			<div class="clearfix"></div>
+		</div>
+		<% if notice.present?%>
+	      <div class="alert alert-success">
+	        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+	        <%= notice %>
+	      </div>
+	    <% end %>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					
+					<div class="x_content">
+						<%= render 'form', registry_employee: @registry_employee %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

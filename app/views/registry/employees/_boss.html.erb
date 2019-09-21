@@ -1,0 +1,6 @@
+<% if boss.present?%>
+	<%selected_item = selected_boss.present? ? {include_blank: true, selected: selected_boss} : {include_blank: true}%>
+	<%= collection_select :registry_employee, :boss_id, boss, :id, :display_name, selected_item, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<% else %>
+	<%= collection_select :registry_employee, :boss_id, Array.new, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<%end%>

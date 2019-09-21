@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: registry_municipalities
+#
+#  id                     :integer          not null, primary key
+#  name                   :string
+#  registry_department_id :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  registry_department: one
+
+two:
+  name: MyString
+  registry_department: two

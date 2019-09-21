@@ -1,0 +1,2 @@
+$("#municipalities_container").html('<%= escape_javascript render(partial: "municipalities", locals: {municipalities: @municipalities, selected_municipality: @selected_municipality}) %>');
+$(".container.spinner").hide();

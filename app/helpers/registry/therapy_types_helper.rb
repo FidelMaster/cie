@@ -1,0 +1,2 @@
+module Registry::TherapyTypesHelper
+end

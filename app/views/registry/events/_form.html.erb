@@ -1,0 +1,197 @@
+<%= form_for(registry_event, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_event.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_event.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_event.one")%></h2>
+
+      <ul>
+        <% registry_event.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :start_time, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de inicio <span class="required">*
+    <%end%> 
+    <fieldset class="col-md-6 col-sm-6 col-xs-12">
+      <div class="control-group">
+        <div class="controls">
+          <div class="xdisplay_inputx form-group has-feedback">
+            <%= f.text_field :start_time, :class=>"form-control datepicker #{ "timepicker" if !f.object.new_record? }", :required=>"required", :placeholder=>"dd/mm/yyyy"%>
+            <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <% if !f.object.new_record? || f.object.start_time.present?%>
+        <script>
+          start_date = "<%=f.object.start_time_formatted%>"
+        </script>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <% if f.object.new_record? %>
+    <div class="item form-group">
+      <%= f.label :start_time, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+        Hora <span class="required">*
+      <%end%>
+      <fieldset class="col-md-6 col-sm-6 col-xs-12">
+        <div class="control-group">
+          <div class="controls">
+            <div class="xdisplay_inputx form-group has-feedback">
+              <input type="text" class="form-control clockpicker-rails event-time" placeholder="hh:mm">
+              <span class="form-control-feedback fa fa-clock-o right" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+        <button type="button" id="btn-show-time-inputs" class="btn btn-success">Agregar más horas</button>
+      </fieldset>
+    </div>
+
+    <div id="time-inputs">
+      
+    </div>
+
+    <%= f.hidden_field :times %>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :end_time, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Fecha de Fin
+    <%end%> 
+    <fieldset class="col-md-6 col-sm-6 col-xs-12">
+      <div class="control-group">
+        <div class="controls">
+          <div class="xdisplay_inputx form-group has-feedback">
+            <%= f.text_field :end_time, :class=>"form-control datepicker endpicker", :placeholder=>"dd/mm/yyyy"%>
+            <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <% if !f.object.new_record? || f.object.end_time.present?%>
+        <script>
+          end_date = "<%=f.object.end_time_formatted%>"
+        </script>
+      <% end %>
+    </fieldset>
+  </div>
+  <div class="item form-group">
+    <%= f.label :recurring, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Recurrencia <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.select_recurring :recurring, nil%>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_employee_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Colaborador <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_employee_id, Registry::Employee.all.where(:active => true), :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_therapy_group_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Grupo de Terapia <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.collection_select :registry_therapy_group_id, Registry::TherapyGroup.all, :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :registry_therapy_room_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Salón <span class="required">*
+    <%end%> 
+    <div id="room_container" class="col-md-6 col-sm-6 col-xs-12">
+      <%= render "therapy_room", :therapy_room => nil %>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="discount">
+    <div class="item form-group">
+      <label class="control-label col-md-3 col-sm-3 col-xs-12">Pacientes <span class="required">*</label>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= select_tag 'registry_event[registry_event_patients_attributes][registry_patient_ids]',
+        options_from_collection_for_select(Registry::Patient.all, "id", "display_name", @selected_patient),
+        {:multiple => true, :size =>10, :class=>"select2_multiple form-control"}
+        %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to "Cancelar", registry_events_path, class: "btn btn-primary"%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>
+
+<script>
+$(document).ready(function(){
+
+  var employee = $("#registry_event_registry_employee_id");
+  var therapyGroupSelect = $("#registry_event_registry_therapy_group_id");
+  var roomID = "<%= @registry_event.present? ? @registry_event.registry_therapy_room_id : nil%>";
+
+  employee.on("change", function() {
+    let employeeId = $(this).val();
+    // let therapyGroupId = '';
+    if (employeeId != "") {
+      $(".container.spinner").show();
+      getTherapyGroupByEmployee(employeeId, function(therapyGroup) {
+        if (therapyGroup == null) {
+          alert('Por favor especificar un grupo de terapia para este colaborador, si aplica.');
+          therapyGroupSelect.val('').trigger('change');
+          $(".container.spinner").hide();
+        } else {
+          selectRoom(therapyGroup.id);
+          therapyGroupSelect.val(therapyGroup.id);
+          therapyGroupSelect.on("change", function(){
+            selectRoom($(this).val());
+          });
+        }
+      });
+    }
+  });
+
+  var value = $("#registry_event_registry_therapy_group_id").val();
+
+  selectRoom(value);
+  
+  function selectRoom(value) {
+    if (value != "") {
+      $(".container.spinner").show();
+      $.getScript('/registry/events/load_therapy_room?registry_therapy_group_id=' + value + '&room_id=' + roomID, function() {
+        init_select2();
+      });
+    }
+  }
+
+  function getTherapyGroupByEmployee(employeeId, retrievedData) {
+    $.ajax({
+      url: '/registry/events/load_therapy_group?registry_employee_id=' + employeeId,
+      type: 'GET',
+      success: function(data) {
+        retrievedData(data);
+      }
+    });
+  }
+});
+</script>

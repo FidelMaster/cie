@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: admin_permissions
+#
+#  id                :integer          not null, primary key
+#  admin_action_id   :integer
+#  admin_resource_id :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  admin_action: one
+  admin_resource: one
+
+two:
+  admin_action: two
+  admin_resource: two

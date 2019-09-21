@@ -1,0 +1,59 @@
+<%= form_for(admin_parameter, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if admin_parameter.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= admin_parameter.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        "Parámetros"%></h2>
+
+      <ul>
+        <% admin_parameter.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre del parámetro <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :inss_hour_price, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Precio por hora INSS <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :inss_hour_price, :class=>"form-control col-md-7 col-xs-12 numeric-input-validated",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :private_hour_price, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Precio por hora Privada <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :private_hour_price, :class=>"form-control col-md-7 col-xs-12 numeric-input-validated",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :is_eval, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Cita / Evaluación?
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.check_box :is_eval, :class=>"flat" %>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", admin_parameters_path, :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>

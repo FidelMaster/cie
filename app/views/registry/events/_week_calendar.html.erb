@@ -1,0 +1,27 @@
+<%= week_calendar events: @calendar_registry_events do |day, occurrences| %>
+    <% start = day.beginning_of_day + 7.hours%>
+    <% ending = day.end_of_day - 6.hours %>
+
+    <% while start < ending do %>
+      <div class="day-hour">
+        <i class="fa fa-clock-o"></i> <%= start.strftime("%I:%M %P") %> - <%= (start + 1.hour).strftime("%I:%M %P") %> 
+        <br/>
+        <% occurrences.each do |occurrence| %>
+          <!--<%
+            # if event.dummy_start_time.hour.between?(start.hour, (start + 1.hour).hour) 
+          %>-->
+          <% if occurrence.hourly_start_time.hour == start.hour %>
+            <div style="background-color: <%= occurrence.registry_event.registry_therapy_room.registry_therapy_type.label_color %>;">
+              <%= link_to occurrence.registry_event.display_name, 
+                  registry_event_path(occurrence.registry_event), 
+                  style: 'color: black !important;',
+                  title: "#{occurrence.display_event_info}",
+                  :rel => 'tooltip', "data-placement" => "bottom" %>
+            </div>
+          <%end%>
+        <%end%>
+      </div>
+
+      <% start += 1.hour %>
+    <% end %>
+<% end %>

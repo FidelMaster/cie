@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: registry_therapy_types
+#
+#  id                    :integer          not null, primary key
+#  name                  :string
+#  description           :text
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  private_therapy_price :decimal(, )
+#  inss_therapy_price    :decimal(, )
+#  label_color           :string
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+
+two:
+  name: MyString
+  description: MyText

@@ -1,0 +1,197 @@
+<%#@start_date = @start_date%>
+<% start = @utilities.first_day_of_month(@start_date)%>
+<% ending = @utilities.last_day_of_month(@start_date)%>
+
+<% start_with_hour = Date.new.beginning_of_day + 7.hours%>
+<% ending_with_hour = Date.new.end_of_day - 6.hours %>
+
+<% month_days_list = @utilities.days_by_week_list(start)%>
+<% weeks_count = @utilities.weeks_in_month(start)%>
+<% weeks = (1..weeks_count)%>
+<% colspan = 4 + weeks_count*3 %>
+<div class="nobreak">
+	<table class="table nobreak" style="font-size 12px;">
+		<thead>
+			<tr>
+				<th colspan="<%=colspan%>">
+					<div style="text-align: center; text-transform: uppercase;">
+						<%= @report_scenario %>, Semana de <%=I18n.l(@utilities.first_day_of_month(@start_date), format: :short)%> a <%=I18n.l(@utilities.last_day_of_month(@start_date), format: :short)%>
+					</div>
+				</th>
+			</tr>
+			<tr>
+				<th style="border-left: 1px solid #ddd; border-right: 1px solid #ddd">
+				
+				</th>
+
+				<% weeks.each do |week|%>
+					<th colspan="3" style="border-right: 1px solid #ddd">
+						Semana (<%=week%>)
+					</th>
+				<%end%>
+				
+				<th >
+					
+				</th>
+				<th >
+				
+				</th>
+				<th style="border-right: 1px solid #ddd">
+			
+				</th>
+			</tr>
+			<tr>
+				<th style="border-left: 1px solid #ddd; border-right: 1px solid #ddd">
+					Equipo / Coordinador
+				</th>
+				<% weeks.each do |week|%>
+					<th style="border-right: 1px solid #ddd">
+						H
+					</th>
+					<th style="border-right: 1px solid #ddd">
+						HC
+					</th>
+					<th style="border-right: 1px solid #ddd">
+						NC
+					</th>
+				<%end%>
+				
+				<th style="border-right: 1px solid #ddd">
+					Hrs
+				</th>
+				<th style="border-right: 1px solid #ddd">
+					Hrs C.
+				</th>
+				<th style="border-right: 1px solid #ddd">
+					% C.
+				</th>
+			</tr>
+		</thead>
+
+		<tbody class="nobreak">
+			<%total_hour_quantity = 0%>
+			<%total_covered_hour = 0%>
+			<%total_missing = 0%>
+			<%global_hour = Hash.new%>
+			<%global_covered_hour = Hash.new%>
+			<%row_hour = Hash.new%>
+			<%row_covered_hour = Hash.new%>
+			<% weeks.each do |week|%>
+				<%global_hour["#{week}"] = 0%>
+				<%global_covered_hour["#{week}"] = 0%>
+			<%end%>
+
+			
+			<% @coordinador.each do |coord|%>
+				<%row_hour = 0%>
+				<%row_covered_hour = 0%>
+				<tr>
+					<% if coord.registry_therapy_group_id.present?%>
+						<td style="padding: 10px; text-align: left; border-right: 1px solid #ddd; border-left: 1px solid #ddd;">
+							<%=Registry::TherapyGroup.find(coord.registry_therapy_group_id).display_name%> / <%= coord.display_name %>
+						</td>
+
+						<% weeks.each do |week|%>
+							
+							<%hour_quantity = 0%>
+							<%covered_hour = 0%>
+							<%month_days_list.each do |day_by_list|%>
+								<%if @utilities.entries[day_by_list.first] == week%>
+									<% @employees.where("boss_id = ? or id = ?", coord.id, coord.id).each do |employee|%>
+										
+										<% calendar_events = @calendar_registry_events.select { |occurrence| 
+										occurrence.registry_event.registry_employee_id == employee.id && 
+										occurrence.registry_event.registry_employee_id == employee.id && 
+										occurrence.start_time.to_date == day_by_list.first.to_date }%>
+
+										<% while start_with_hour < ending_with_hour do %>
+											<% calendar_events.each do |event| %>
+
+												<% if event.hourly_start_time.hour == start_with_hour.hour%>
+													<% hour_quantity +=1%>
+													<% event.registry_event.registry_patients.each do |patient| %>
+														<% if Registry::PatientAssistance.where("assistance_date >= ? 
+														and assistance_date <= ? and registry_patient_id = ? ", 
+														day_by_list.first.to_date.beginning_of_day, 
+														day_by_list.first.to_date.end_of_day, patient.id).present? %>
+															<% covered_hour += 1 %>
+														<% end%>
+													<% end %>
+												<%end%>
+											<% end %>
+											<% start_with_hour += 1.hour %>
+										<% end %>
+										<% start_with_hour = Date.new.beginning_of_day + 7.hours%>
+											
+									<%end%>
+								<%end%>
+							<%end%>
+
+							<td style="padding: 10px; text-align: right; border-right: 1px solid #ddd">
+								<%= hour_quantity %>
+								<% global_hour["#{week}"] += hour_quantity%>
+								<%row_hour += hour_quantity%>
+							</td>
+
+							<td style="padding: 10px; text-align: right; border-right: 1px solid #ddd; color: green">
+								<strong><%= covered_hour %></strong>
+								<% global_covered_hour["#{week}"] += covered_hour%>
+								<%row_covered_hour += covered_hour%>
+							</td>
+
+							<td style="padding: 10px; text-align: right; border-right: 1px solid #ddd; color: red">
+								<%diff = hour_quantity - covered_hour%>
+								<strong><%= diff %></strong>
+							</td>
+							<!--
+							<td style="padding: 10px; text-align: right; border-right: 1px solid #ddd">
+								<%= #number_with_precision((covered_hour*100.00/hour_quantity), precision: 2) 
+								%>%
+							</td>-->
+						<%end%>
+
+						<td style="padding: 10px; text-align: left; border-right: 1px solid #ddd; border-left: 1px solid #ddd;">
+							<%= row_hour%>
+						</td>
+						<td style="padding: 10px; text-align: left; border-right: 1px solid #ddd; border-left: 1px solid #ddd; color:green">
+							<%= row_covered_hour%>
+						</td>
+						<td style="padding: 10px; text-align: left; border-right: 1px solid #ddd; border-left: 1px solid #ddd; color:blue">
+							<% if row_hour > 0%>
+              					<%= number_with_precision((row_covered_hour*100.00/row_hour), precision: 2) %>%
+							<% else %>
+								<%= '0.00%' %>
+							<% end %>
+						</td>
+					<% end %>
+				</tr>
+			<% end %>
+			
+			<tr>
+				<td style="padding: 10px; text-align: left; border: 1px solid #ddd;">
+
+				</td>
+				<% weeks.each do |week|%>
+					<td style="padding: 10px; text-align: right; border: 1px solid #ddd;">
+						<strong><%= global_hour["#{week}"] %></strong>
+					</td>
+					<td style="padding: 10px; text-align: right; border: 1px solid #ddd; color: green">
+						<strong><%= global_covered_hour["#{week}"]%></strong>
+					</td>
+					<td style="padding: 10px; text-align: right; border: 1px solid #ddd; color:red">
+						<strong><%= global_hour["#{week}"] - global_covered_hour["#{week}"]%></strong>
+					</td>
+				<%end%>
+				<td style="padding: 10px; text-align: left; border: 1px solid #ddd;">
+
+				</td>
+				<td style="padding: 10px; text-align: left; border: 1px solid #ddd;">
+
+				</td>
+				<td style="padding: 10px; text-align: left; border: 1px solid #ddd;">
+
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,6 @@
+<% if therapy_room.present?%>
+	<%selected_room_id = @selected_room_id.present? ? {include_blank: true, :required=>"required", selected: @selected_room_id} : {include_blank: true, :required=>"required"}%>
+	<%= collection_select :registry_event, :registry_therapy_room_id, therapy_room, :id, :display_name, selected_room_id, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<% else %>
+	<%= collection_select :registry_event, :registry_therapy_room_id, Array.new, :id, :display_name, { include_blank: true, :required=>"required"}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+<%end%>

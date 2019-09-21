@@ -1,0 +1,2 @@
+module Registry::EmployeePositionsHelper
+end

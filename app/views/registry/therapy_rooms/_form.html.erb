@@ -1,0 +1,70 @@
+<%= form_for(registry_therapy_room, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_therapy_room.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_therapy_room.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_therapy_room.one")%></h2>
+
+      <ul>
+        <% registry_therapy_room.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_field :name, :class=>"form-control col-md-7 col-xs-12",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :capacity, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Capacidad del Salón <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.number_field :capacity, :class=>"form-control col-md-7 col-xs-12 numeric-input-validated",:required=>"required" %>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="therapy_type">
+    <div class="item form-group">
+      <%= f.label :registry_therapy_type_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Tipo de terapia <span class="required">*
+      <%end%> 
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= f.collection_select :registry_therapy_type_id, Registry::TherapyType.all, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1",:required=>"required"} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="therapy_type">
+    <div class="item form-group">
+      <%= f.label :registry_level_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Área <span class="required">*
+      <%end%> 
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= f.collection_select :registry_level_id, Registry::Level.all, :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1",:required=>"required"} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="item form-group">
+    <%= f.label :description, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Descripción <span class="required">*
+    <%end%> 
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <%= f.text_area :description, :class=>"form-control col-md-7 col-xs-12",:required=>"required"%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", registry_therapy_rooms_path, :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>

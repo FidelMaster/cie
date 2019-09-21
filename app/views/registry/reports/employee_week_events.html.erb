@@ -1,0 +1,55 @@
+<div class="right_col" role="main">
+	<div class="">
+		<div class="title_page">
+	      Registro
+	    </div>
+		<div class="x_title">
+			<h2>Horario Semanal</h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
+						<%= form_tag print_report_registry_reports_path, method: "get", html: {:class=>"form-horizontal form-label-left", :novalidate => nil}, target: :_pdf do %>
+
+
+							<div class="item form-group">
+				                <%= label_tag "Colaborador", nil, :class=>"control-label col-md-3 col-sm-3 col-xs-12" %>
+				                <div class="col-md-6 col-sm-6 col-xs-12">
+				                  <%= collection_select(:filter, :employee, Registry::Employee.all, :id, :display_name, {:include_blank => true, :required=>"required"},{:class=>"select2_single form-control",:required=>"required"}) %>
+				                </div>
+				            </div>
+							<div class="clearfix"></div>
+							<br>
+
+				            <div class="item form-group">
+								<%= label_tag "Semana", nil, :class=>"control-label col-md-3 col-sm-3 col-xs-12" %>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<%= text_field :filter, :date_range, :class => "form-control input-sm only-date date-range" %>
+								</div>
+			                </div>
+			                <div class="clearfix"></div>
+			                <br>
+			                <%= text_field :filter, :start_date, value: Date.today.beginning_of_week, type: :hidden, :class=>"start_hidden" %>
+			                <%= text_field :filter, :end_date, value: Date.today.end_of_week, type: :hidden, :class=>"end_hidden" %>
+			                <%= text_field :filter, :symbol, value: :employee, type: :hidden %>
+			                <%= text_field :filter, :single, value: :true, type: :hidden %>
+
+							<div class="clearfix"><br></div>
+							<div class="form-group">
+								<div class="col-md-6 col-md-offset-3">
+								<%=link_to("Cancelar", registry_root_path, :class=>"btn btn-primary")%>
+								<button id="send" type="submit" class="btn btn-success">Generar</button>
+								</div>
+							</div>
+
+
+						<% end %>
+						<br><br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

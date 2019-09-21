@@ -1,0 +1,86 @@
+<% @weeks_with_days.each do |week| %>
+
+  <div style=<%= @single_report.present? ? "display: inline-block" : "width: 49%; display: inline-block"%>>
+    <table class="table table-striped" style="font-size: 12px">
+      <thead>
+        <tr>
+          <th style="border: 0.5px solid black; color: black !important;" colspan="6">
+            <div style="text-align: center; text-transform: uppercase;">
+              <%= @report_scenario %>, Semana de <%=I18n.l(week.first, format: :short)%> a <%=I18n.l(week.last - 2.days, format: :short)%>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th style="border: 0.5px solid black; color: black !important;">
+            Colaborador
+          </th style="border: 0.5px solid black; color: black !important;">
+          <th style="border: 0.5px solid black; color: black !important;">
+            Total Horas
+          </th style="border: 0.5px solid black; color: black !important;">
+          <th style="border: 0.5px solid black; color: black !important;">
+            Horas Cubiertas
+          </th>
+          <th style="border: 0.5px solid black; color: black !important;">
+            Horas No Cubiertas
+          </th>
+          <th style="border: 0.5px solid black; color: black !important;">
+            % Cumplimiento
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+    
+        <% week.slice(0,5).each_slice(5) do |days| %>
+        
+          <% @employees.each do |employee|%>
+        
+            <tr>
+              <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: left;">
+                <%= employee.first_name%>
+              </td>
+              <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+                <% days.each_with_index do |day, index| %>
+                  0
+                <% end %>
+                0
+                <% total_hour_quantity += hour_quantity%>
+              </td>
+              <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+                <% days.each_with_index do |day, index| %>
+                 0
+                <% end %>
+                <%= covered_hour %>
+                <% total_covered_hour += covered_hour%>
+              </td>
+              <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+              0
+              </td>
+              <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+                
+               0
+              </td>
+            </tr>
+          <%end%>
+        <% end %>
+        <tr>
+          <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+
+          </td>
+          <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+           0
+          </td>
+          <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+           0
+          </td>
+          <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+           0
+          </td>
+          <td style="border: 0.5px solid black; color: black !important; padding: 10px; text-align: right;">
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>

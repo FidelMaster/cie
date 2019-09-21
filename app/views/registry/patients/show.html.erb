@@ -1,0 +1,166 @@
+<div class="right_col" role="main" style="min-height: 1053px;">
+  <div class="">
+    <div class="clearfix"></div>
+    <div class="title_page">
+      Registro
+    </div>
+    <div class="x_title">
+      <h2><%=@registry_patient.display_name %></h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%= link_to print_info_icon(:pdf), registry_patient_print_patient_path(@registry_patient), target: :_blank %>
+        </li>
+        <li>
+          <%= link_to print_info_icon(:excel), registry_patient_print_patient_path(@registry_patient, :xlsx), target: :_blank %>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="col-md-8 col-lg-8 col-sm-7">
+              <!-- blockquote -->
+              <blockquote>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <h2>Datos generales:</h2>
+                  <br>
+                  <div class="clearfix"></div>
+                
+                  <div class="profile_pic circle" style="background-image: url('<%=@registry_patient.image_source("child_avatar")%>'); float:left"></div>
+                  
+                </div>
+                <div class="clearfix"></div>
+                  <br>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <h2>Nombre:</h2>
+                  <h4><%= @registry_patient.display_name %></h4>
+
+                  <h2>Padre:</h2>
+                  <h4><%= @registry_patient.father_name %></h4>
+
+                  <h2>Madre:</h2>
+                  <h4><%= @registry_patient.mother_name %></h4>
+
+                  <h2>Género</h2>
+                  <h4><%= @registry_patient.gender %></h4>
+
+                  <h2>Condición Médica</h2>
+                  <h4><%= @registry_patient.registry_condition.display_name %></h4>
+
+                  <% if @registry_patient.schedule.count > 0 %>
+                    <h2>Horario</h2>
+                    <h4><%= @registry_patient.schedule.first + '-' + @registry_patient.schedule.last %></h4>
+                  <% end %>
+                  
+                  <h2>Fecha de nacimiento</h2>
+                  <h4><%= @registry_patient.birth_date_formatted %></h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <h2>Correo electrónico de contacto</h2>
+                  <h4><a href="mailto:<%= @registry_patient.email %>"><%= @registry_patient.email %></a></h4>
+
+                  <h2>Teléfono</h2>
+                  <ol>
+                    <% if @registry_patient.phone.present? %>
+                      <li><h4><i class="fa fa-phone" aria-hidden="true"></i> <%= @registry_patient.phone %></h4></li>
+                    <% end %>
+                    <% if @registry_patient.mobile_phone.present? %>
+                      <li><h4><i class="fa fa-mobile" aria-hidden="true"></i> <%= @registry_patient.mobile_phone %></h4></li>
+                    <% end %>
+                  </ol>
+
+                  <h2>Referido por</h2>
+                  <h4><%= @registry_patient.reference_to_center %></h4>
+
+                  <h2>Departamento</h2>
+                  <h4><%= @registry_patient.registry_department.display_name %></h4>
+                  
+                  <h2>Municipio</h2>
+                  <h4><%= @registry_patient.registry_municipality.display_name %></h4>
+                  <% if @registry_patient.registry_municipality.display_name == 'Managua' %>
+                    <h2>Distrito</h2>
+                    <h4><%= @registry_patient.district %></h4>
+                  <% end %>
+                </div>
+                <div class="clearfix"></div>
+                <br>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <h2>Dirección</h2>
+                  <h4><%= @registry_patient.address %></h4>
+
+                  <h2>Observaciones</h2>
+                  <h4><%= @registry_patient.comments %></h4>
+                </div>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <h2>Ficha clínica:</h2>
+                </div>
+                <div class="clearfix"></div>
+                <% if @registry_patient.registry_medical_records.present? %>
+                  <% @registry_patient.registry_medical_records.each do |medical_record| %>
+                    <div class="clearfix"></div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                      <h2>Tipo de terapia</h2>
+                      <h4><%= medical_record.registry_therapy_type.display_name %></h4>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                      <h2>Hr / Semana</h2>
+                      <h4><%= medical_record.week_therapy_hours %></h4>
+                    </div>
+                  <%end%>
+                <%else%>
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                    <%= link_to 'Ficha Clínica', registry_patient_medical_record_path(@registry_patient), :class=>"btn btn-primary" %>
+                  </div>
+                <%end%>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <h2>Requerimientos pendientes:</h2>
+                  <ol>
+                  <% if @registry_patient.registry_treatment_requirement.present? %>
+                    <% Registry::TreatmentRequirement.column_names.each do |treatment| %>
+                      <% if @registry_patient.registry_treatment_requirement.public_send(treatment).is_a?(FalseClass) %>
+                          <li><%=Registry::TreatmentRequirement.treatment_hash[treatment.to_sym]%></li>
+                      <%end%>
+                    <%end%>
+                  <%else%>
+                    <% Registry::TreatmentRequirement.column_names.each do |treatment| %>
+                      <%if Registry::TreatmentRequirement.treatment_hash[treatment.to_sym].present?%>
+                        <li><%=Registry::TreatmentRequirement.treatment_hash[treatment.to_sym]%></li>
+                      <%end%>
+                    <%end%>
+                  <%end%>
+                  </ol>
+                </div>
+                <div class="clearfix"></div>
+              </blockquote>
+
+              <blockquote class="blockquote-reverse">
+
+                  <%= link_to 'Editar', edit_registry_patient_path(@registry_patient), :class=>"btn btn-primary" %>
+                  <%= link_to 'Ficha Clínica', registry_patient_medical_record_path(@registry_patient), :class=>"btn btn-primary" %>
+                  <%= link_to 'Control de asistencias', registry_patient_assistance_path(@registry_patient), :class=>"btn btn-success" %>
+                  <%= link_to 'Atrás', registry_patients_path, :class=>"btn btn-success" %>
+
+              </blockquote>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

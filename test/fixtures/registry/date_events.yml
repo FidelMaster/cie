@@ -1,0 +1,39 @@
+# == Schema Information
+#
+# Table name: registry_date_events
+#
+#  id                  :integer          not null, primary key
+#  name                :string
+#  description         :text
+#  start_time          :datetime
+#  end_time            :datetime
+#  color               :string
+#  date_event_type     :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  registry_patient_id :integer
+#  billable            :boolean
+#  comments            :text
+#  completed_date      :boolean
+#  child_guardian      :string
+#  phone_number        :string
+#  child_name          :string
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  start_time: 2017-06-20 16:46:18
+  end_time: 2017-06-20 16:46:18
+  color: MyString
+  type: 
+
+two:
+  name: MyString
+  description: MyText
+  start_time: 2017-06-20 16:46:18
+  end_time: 2017-06-20 16:46:18
+  color: MyString
+  type: 

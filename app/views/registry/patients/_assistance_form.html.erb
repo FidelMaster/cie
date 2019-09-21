@@ -1,0 +1,197 @@
+<%= form_for(registry_patient, html: {:class=>"form-horizontal form-label-left", :novalidate => nil}) do |f| %>
+  <% if registry_patient.errors.any? %>
+    <div id="error_explanation" class="alert-danger">
+      <h2><%= registry_patient.errors.count %> error(es) <%=t 'activerecord.errors.template.header.other', :model => 
+        t("will_paginate.models.registry_patient.one")%></h2>
+
+      <ul>
+        <% registry_patient.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="item form-group">
+    <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Nombre:
+    <%end%> 
+      <%= f.label :first_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      <%= registry_patient.display_name %>
+    <%end%>
+  </div>
+
+  <div class="item form-group">
+     <%= f.label :registry_condition_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Condición:
+    <%end%> 
+      <%= f.label :registry_condition_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      <%= registry_patient.registry_condition.display_name %>
+    <%end%>
+  </div>
+  
+  <div class="clearfix"></div>
+  <hr>
+  
+  <%= f.label :registry_patient_assistances, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+    Registro de asistencia:
+  <%end%>
+  <div class="clearfix"></div>
+  <br>
+  <%= f.fields_for :registry_patient_assistances, @registry_patient_assistance do |ff| %>
+    <div class="item form-group">
+      <%= ff.label :tutor, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %> 
+        Padre/Madre/Tutor
+      <%end%>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= collection_select :registry_patient_assistance, 
+        :tutor, registry_patient.persons_from_record, :first, :last, 
+        {
+        selected: ff.object.personal_code, 
+        include_blank: "Por favor seleccionar a alguien", 
+        class: "form-control col-md-3 col-sm-3 col-xs-12 select2-single", tabindex: "-1" } %>
+        <%= ff.hidden_field :tutor, value: ff.object.tutor != '' ? ff.object.tutor : '' %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= label_tag 'adicional', 'O adicional', class: "control-label col-md-3 col-sm-3 col-xs-12" %>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= text_field 'assistance', 'someone_else', 
+          value: ff.object.tutor != '' ? ff.object.tutor : '',
+         class: "form-control col-md-3 col-sm-3 col-xs-12 select2-single" %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= ff.label :personal_code, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %> 
+        Número de Identificación <span class="required">*
+      <%end%>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <%= ff.text_field :personal_code, :class=>"form-control col-md-3 col-sm-3 col-xs-12", :required=>"required"%>
+      </div>
+    </div>
+    
+    <%# <div class="item form-group"> %>
+      <%# ff.label :registry_employee_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %> 
+        <%# Colaborador%>
+      <%# end%>
+      <%# <div class="col-md-3 col-sm-3 col-xs-12">%>
+        <%# ff.collection_select :registry_employee_id, 
+        Registry::Employee.all.where(:active => true), :id, :display_name, { include_blank: true}, { :class=>"select2_single form-control", :tabindex=>"-1" }%>
+      <%# </div>%>
+    <%# </div>%>
+
+    <div class="item form-group">
+      <%= ff.label :assistance_date, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Fecha<span class="required">*
+      <%end%> 
+      <fieldset class="col-md-3 col-sm-3 col-xs-12">
+        <div class="control-group">
+          <div class="controls">
+            <div class="xdisplay_inputx form-group has-feedback">
+              <%= ff.text_field :assistance_date, :class=>"form-control datepicker", :required=>"required", :placeholder=>"dd/mm/yyyy"%>
+              <span class="form-control-feedback fa fa-calendar-o right" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+        <% if !ff.object.new_record? %>
+          <script>
+            start_date = "<%=ff.object.start_time_formatted%>"
+          </script>
+        <% end %>
+      </fieldset>
+    </div>
+    
+
+    <div class="item form-group">
+      <%= ff.label :employee_who_receives_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %> 
+        Colaborador/a que recibe
+      <%end%>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <%= ff.collection_select :employee_who_receives_id, Registry::Employee.all.where(:active => true), :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= ff.label :received_at, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Hora que recibe
+      <%end%> 
+      <fieldset class="col-md-3 col-sm-3 col-xs-12">
+        <div class="control-group">
+          <div class="controls">
+            <div class="xdisplay_inputx form-group has-feedback">
+              <%= ff.text_field :received_at, :class=>"form-control clockpicker-rails", placeholder: "HH:MM", value: ff.object.received_at? ? ff.object.received_at.strftime('%H:%M') : Time.now.strftime('%H:%M') %>
+              <span class="form-control-feedback fa fa-clock-o right" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="item form-group">
+      <%= ff.label :employee_who_delivers_id, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %> 
+        Colaborador/a que entrega
+      <%end%>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <%= ff.collection_select :employee_who_delivers_id, Registry::Employee.all.where(:active => true), :id, :display_name, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+      </div>
+    </div>
+
+    <div class="item form-group">
+      <%= ff.label :delivered_at, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      Hora que entrega
+      <%end%> 
+      <fieldset class="col-md-3 col-sm-3 col-xs-12">
+        <div class="control-group">
+          <div class="controls">
+            <div class="xdisplay_inputx form-group has-feedback">
+              <%= ff.text_field :delivered_at, :class=>"form-control clockpicker-rails", placeholder: "HH:MM", value: ff.object.received_at? ? ff.object.delivered_at.strftime('%H:%M') : Time.now.strftime('%H:%M') %>
+              <span class="form-control-feedback fa fa-clock-o right" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+   <%# <div class="item form-group"> %>
+      <%# ff.label :scenario, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+      <%# Escenario <span class="required">* %>
+      <%# end %> 
+      <%# <div class="col-md-3 col-sm-3 col-xs-12"> %>
+        <%# ff.select :scenario, Registry::PatientAssistance.scenario_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1", :required=>"required"} %>
+      <%# </div> %>
+    <%# </div> %>
+  <% end %>
+  
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-3">
+      <%=link_to("Cancelar", registry_patient_assistance_path(registry_patient.id), :class=>"btn btn-primary")%>
+      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var additional = $("#assistance_someone_else");
+    var typeTutor = $("#registry-patient-assistance-aditional");
+    var selectTutor = $("#registry_patient_assistance_tutor");
+    var inputTutor = $("#registry_patient_registry_patient_assistances_attributes_0_tutor")
+    var personalCodeInput = $("#registry_patient_registry_patient_assistances_attributes_0_personal_code");
+    
+    selectTutor.select2();
+
+    selectTutor.on("change", function() {
+      let text = $("option:selected",this).text();
+      let personal_code = $(this).val();
+      personalCodeInput.val(personal_code);
+      inputTutor.val(text);
+    });
+
+    additional.on("keyup", function(e) {
+      inputTutor.val(e.target.value);
+    });
+  });
+</script>
+

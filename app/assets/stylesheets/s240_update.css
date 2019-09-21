@@ -1,0 +1,412 @@
+.bg-green{
+	background: #00a1ff !important;
+    border: 1px solid #00a1ff !important;
+    color: #fff;
+}
+
+/*tables*/
+table.jambo_table thead{
+	background: inherit;
+	border-bottom: 2px solid #005fd4;
+
+}
+table.jambo_table thead,.antoo.submit-form{
+	color: #0d67b2;
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+table.jambo_table thead th{
+	font-weight: 900;
+}
+.table>caption+thead>tr:first-child>th, .table>caption+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>thead:first-child>tr:first-child>th, .table>thead:first-child>tr:first-child>td{
+	border: 0;
+}
+table.jambo_table{
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid rgba(0,0,0,0.2);
+}
+
+.table>thead>tr>td, .table>tbody>tr>th, .table>tbody>tr>td, .table>tfoot>tr>th, .table>tfoot>tr>td{
+	padding: 10px;
+	line-height: normal;
+	color: rgba(0,0,0,1);
+	vertical-align: middle;
+}
+.table>thead>tr>th{
+	padding: 20px 10px;
+}
+.table>tbody>tr>td{
+	border-color: #ecf4f9;
+}
+table.jambo_table tbody tr:hover td{
+	background: #ecf4f9;
+    border-top: 1px solid #ecf4f9;
+    border-bottom: 1px solid #ecf4f9;
+}
+/*label*/
+.digg_pagination .page_info{
+	font-style: italic;
+}
+.digg_pagination .page_info b{
+    background: #005fd4;
+    padding: 5px 10px;
+    text-transform: capitalize;
+    margin: 0 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+/*responsive table*/
+.table-responsive{
+	border:0;
+}
+/*checkbox*/
+.antoo.submit-form{
+	color: #0d67b2 !important;
+	text-transform: uppercase !important;
+	font-size: 11px !important;
+	font-weight: 900 !important;
+}
+.antoo.submit-form .icon_svg{
+	margin-left: 10px;
+}
+.antoo.submit-form .svg-icon path,
+.antoo.submit-form .svg-icon polygon,
+.antoo.submit-form .svg-icon rect {
+  fill: #0d67b2;
+}
+
+.antoo.submit-form .svg-icon circle {
+  stroke: #0d67b2;
+}
+
+/*icons svg*/
+/* -----
+SVG Icons - svgicons.sparkk.fr
+----- */
+
+.icon_svg{
+	/*display: block;*/
+	width: 15px;
+	height: 15px;
+	vertical-align: top;
+}
+.icon_svg svg{
+	display: block;
+}
+.svg-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: #4691f6;
+}
+
+.svg-icon circle {
+  stroke: #4691f6;
+  stroke-width: 1;
+}
+/*split*/
+.split_right_icon_section,
+.split_left_icon_section{
+	position: relative;
+}
+.split_right_icon_section:before,
+.split_left_icon_section:before{
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	display: block;
+	width: 2px;
+	height: 10px;
+}
+.split_left_icon_section:before{
+	left: 0;
+	border-left: 2px solid rgba(0,0,0,0.1)
+}
+.split_right_icon_section:before{
+	right: 0;
+	border-right: 2px solid rgba(0,0,0,0.1)
+}
+
+/*paciente*/
+.x_title .panel_button.navbar-right{
+	margin-left: 40px;
+}
+
+/*buttons x title*/
+.x_title .panel_button.navbar-right .btn.btn-info{
+	background: inherit;
+	border: 0;
+	color: rgba(0,0,0,0.3);
+	font-weight: bold;
+	/*color: rgba(0, 95, 212);*/
+	padding: 0;
+	box-shadow: none;
+	margin-top: 0px;
+	margin-right: 20px;
+	vertical-align: middle;
+	font-size: 11px;
+	font-style: italic;
+	/*transition*/
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.x_title .panel_button.navbar-right .btn.btn-info:hover{
+	color: rgba(0,95,212,1);
+}
+/*icons*/
+.x_title .panel_button.navbar-right .btn.btn-info .icon_svg{
+	/*display: block;*/
+	margin-right: 10px;
+	width: 28px;
+	height: 28px;
+	vertical-align: middle;
+}
+
+.x_title .panel_button.navbar-right .btn.btn-info .svg-icon path,
+.x_title .panel_button.navbar-right .btn.btn-info .svg-icon polygon,
+.x_title .panel_button.navbar-right .btn.btn-info .svg-icon rect {
+  fill: rgba(0,95,212,1);
+}
+
+.x_title .panel_button.navbar-right .btn.btn-info .svg-icon circle {
+  stroke: rgba(0,95,212,1);
+}
+/*plus*/
+.panel_button.nav>li>a.plus_header_container{
+	padding: 0;
+	margin: 0;
+}
+.x_title .panel_button.navbar-right .plus.icon_svg{
+	vertical-align: top;
+	width: 28px;
+	height: 28px;
+}
+.x_title .panel_button.navbar-right .plus.icon_svg .svg-icon path,
+.x_title .panel_button.navbar-right .plus.icon_svg .svg-icon polygon,
+.x_title .panel_button.navbar-right .plus.icon_svg .svg-icon rect {
+  fill: rgba(0,95,212,1);
+}
+
+.x_title .panel_button.navbar-right .plus.icon_svg .svg-icon circle {
+  stroke: rgba(0,95,212,1);
+}
+
+table.jambo_table tbody tr.selected td{
+	background: #ecf4f9;
+}
+table.jambo_table tbody tr.selected{
+	background: #f9f9f9;
+}
+table.jambo_table tbody tr.selected td{
+	border-color:  #ecf4f9;
+}
+table.jambo_table tbody tr td{
+	border-left:0;
+	border-right: 0;
+}
+table.jambo_table tbody tr:hover td{
+	border-left:0;
+	border-right: 0;
+}
+
+.icheckbox_flat-green, .iradio_flat-green{
+	background: url(/assets/checkbox_lesther.png) no-repeat;
+}
+
+
+/*agenda*/
+ul.bar_tabs{
+	margin-top: 50px;
+	text-transform: uppercase;
+	background: inherit;
+	border:0;
+	margin-right: 0;
+	margin-left: 0;
+	padding: 0;
+	height: auto;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
+	border:0;
+	background: inherit;
+}
+ul.bar_tabs>li,
+ul.bar_tabs>li a:focus,
+ul.bar_tabs>li a:hover,
+ul.bar_tabs>li a,
+ul.bar_tabs>li.active{
+	border:0;
+	background: inherit;
+	margin-left: 0;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
+	color: #fff;
+	background: #005fd4;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+ul.bar_tabs>li{
+	display: inline-block;
+	float: none;
+	margin-right: 10px;
+}
+ul.bar_tabs>li a{
+	padding: 5px 10px;
+	font-size: 11px;
+	font-weight: 600;
+	color: #000;
+}
+.bar_tabs.nav:before, .bar_tabs.nav:after{
+	content: none;
+}
+/*footer*/
+footer .pull-right{
+	font-style: italic;
+}
+.logo_bi{
+	filter: alpha(opacity=70);
+	-moz-opacity: 0.7;
+	opacity: 0.7;
+	display: block;
+	width: 100px;
+	height: 35px;
+	/*transition*/
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	background-image: url('/assets/logo_bi.png');
+}
+.logo_bi:hover{
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	opacity: 1;
+}
+
+/*forms*/
+.form-group .control-label{
+	color: #0d67b2;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 900;
+}
+.form-group{
+	margin-bottom: 10px;
+
+}
+.item input, .item textarea,
+.bad input, .bad select, .bad textarea{
+	background: #ecf4f9;
+	border:0;
+	box-shadow: none;
+	border: 1px solid transparent;
+}
+input,text-area{
+	font-family: 'Lato', sans-serif;
+}
+text-area.form-control,
+input.form-control{
+	/*transition*/
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+	/*padding: 20px;*/
+	color: #000;
+}
+.form-control {
+	height: 40px;
+}
+
+text-area.form-control:active,
+input.form-control:active,
+text-area.form-control:focus,
+input.form-control:focus{
+	border: 1px solid #00a1ff;
+	background: #fff;
+}
+
+/*buttons*/
+.btn.btn-primary{
+	background: inherit;
+	color: #0d67b2;
+	border: 1px solid #005fd4;
+	box-shadow: none;
+	/*transition*/
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.btn.btn-success{
+	background: #005fd4;
+	color: #fff;
+	border: 0;
+	box-shadow: none;
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+.btn.btn-primary:active,
+.btn.btn-primary:focus,
+.btn.btn-primary:hover{
+	border: 1px solid #005fd4;
+	color:#0d67b2;
+	background: #d3e2ee;
+}
+.btn.btn.btn-success:hover{
+	background: #008cde;
+}
+
+/*panel shadow*/
+.resumen{
+	-moz-box-shadow:    -10px 10px 30px 0px rgba(0,0,0,0.05);
+	-webkit-box-shadow: -10px 10px 30px 0px rgba(0,0,0,0.05);
+	box-shadow:         -10px 10px 30px 0px rgba(0,0,0,0.05);
+}
+
+/*logo cie*/
+.logo_cie_container{
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	z-index: 3;
+	left: 190px;
+	background: #fff;
+	bottom: 5px;
+}
+.logo_cie{
+	position: absolute;
+	background-image: url('/assets/logo_cie.png');
+	width: 70%;
+	height: 70%;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin:auto;
+}
+@media (min-resolution: 1.5dppx), (min-resolution: 144dpi), (-webkit-min-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2) {
+	.logo_cie{
+		background-image: url('/assets/logo_cie.svg');
+	}
+}
+@media (max-width: 991px) {
+	.logo_cie_container{
+		left: 20px;
+	}
+
+}

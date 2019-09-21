@@ -1,0 +1,78 @@
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+        Administración
+      </div>
+    <div class="x_title">
+      <h2>Libros</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%= link_to(new_resource_icon,new_admin_cie_user_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+              <%= form_tag destroy_multiple_admin_cie_users_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th>
+                        <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title">Nombre</th>
+                      <th class="column-title">Correo</th>
+                      <th class="column-title">Rol</th>
+
+                      <th class="column-title no-link last text-center" colspan="3">Action</th>
+                      </th>
+                      <th class="bulk-actions" colspan="6">
+                        <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i></button>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @admin_cie_users.each_with_index do |admin_cie_user, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td class="center">
+                                    <input type="checkbox" name="admin_cie_user_ids[]" id="admin_cie_user_id_<%=admin_cie_user.id%>" value="<%=admin_cie_user.id%>" class="flat deletable">
+                              </td>
+
+                        <td><%= admin_cie_user.name %></td>
+                        <td><%= admin_cie_user.email %></td>
+                        <td><%= admin_cie_user.admin_cie_roles.present? ? admin_cie_user.admin_cie_roles.map{|b| b.display_name} : ""%></td>
+                        <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, admin_cie_user_path(admin_cie_user.id) %></td>
+                        <td class="last text-center"><%= link_to edit_resource_icon, edit_admin_cie_user_path(admin_cie_user.id) %></td>
+                        <td class="last text-center"><%= link_to delete_resource_icon, admin_cie_user_path(admin_cie_user.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+
+                </table>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

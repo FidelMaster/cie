@@ -1,0 +1,355 @@
+<%content_for :dialog_pdf do%>
+  <%= form_tag print_invoice_registry_patients_path, method: "get", target: :_pdf, :format => [:pdf, :xls] do %>
+
+    <!-- Trigger the modal with a button -->
+    <%=print_button_tag("Imprimir Facturación")%>
+
+    <!-- Modal -->
+    <div id="ModalFilterPDF" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Filtrar Pacientes a Facturar</h4>
+          </div>
+          <div class="modal-body">
+                <div class="item form-group">
+                  <%= label :date_range, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  Fecha <div class="required">*
+                  <%end%> 
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= text_field :filer, :date_range, :class => "form-control input-sm only-date date-range" %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="item form-group">
+                  <%= label :services, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  Servicios
+                  <%end%> 
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :services, Registry::TherapyType.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="item form-group">
+                  <%= label :patient_type, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  Tipo de Paciente
+                  <%end%> 
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= select :filter, :patient_type, Registry::Patient.patient_type_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="item form-group">
+                  <%= label :patient_name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  Nombre de paciente
+                  <%end%> 
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :patient_name, Registry::Patient.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="item form-group">
+                  <%= label :invoice_code, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do %>
+                  # de recibo
+                  <%end%>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= text_field :filter, :invoice_code, :class => "form-control input-sm" %>
+                  </div>
+                </div>
+                <%= text_field :filter, :start_date, value: Date.today.strftime("%d/%m/%Y"), type: :hidden, :class=>"start_hidden" %>
+                <%= text_field :filter, :end_date, value: Date.today.strftime("%d/%m/%Y"), type: :hidden, :class=>"end_hidden" %>
+                
+          </div>
+          <br><br>
+          <div class="modal-footer">
+            <!--data-dismiss="modal"-->
+            <a type="button" href="<%=registry_patients_path%>" class="btn btn-default">Cancelar</a>
+            <%= submit_tag "Previsualización", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ print_invoice_registry_patients_path(format: :pdf) }')"%>
+            <%= submit_tag "XLS", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ print_invoice_registry_patients_path(format: :xlsx) }')"%>
+            <%= submit_tag "PDF", class: "btn btn-default", onClick: "$(this).closest('form').attr('action', '#{ print_invoice_registry_patients_path(format: :pdf) }')"%>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+<%end%>
+
+
+<div class="row">
+  <%content_for :dialog do %>
+    <div class="col-md-4">
+      <%= form_tag registry_patients_path, method: "get" do %>
+
+
+      <!-- Trigger the modal with a button -->
+      <%=filter_button_tag%>
+
+      <!-- Modal -->
+      <div id="ModalFilter" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Filtrar Pacientes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                  <%= label_tag "Paciente", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :patient, Registry::Patient.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Condición", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :condition, Registry::Condition.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Genero", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= select :filter, :gender, Registry::Patient.gender_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+                  </div>
+                </div>
+                <br><br>  
+                <div class="form-group">
+                  <%= label_tag "Estado", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= select :filter, :status, Registry::Patient.status_map, { include_blank: true}, {:class=>"select2_single form-control", :tabindex=>"-1"} %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Departamento de origen", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :department, Registry::Department.all, :id, :display_name, {:include_blank => true},{:class=>"select2_single form-control"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Distrito", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= collection_select(:filter, :district, Registry::Patient.districts, :to_s, :to_s, {:include_blank => true},{:class=>"select2_single form-control", tabindex: "-1"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Tipo de paciente", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <%= select(:filter, :patient_type, Registry::Patient.patient_type_map, {:include_blank => true},{:class=>"select2_single form-control", tabindex: "-1"}) %>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Permiso para tomar fotos", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                      <div class="custom-control custom-radio">
+                        <%= label_tag :permission_to_take_photos, 'Sí', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :permission_to_take_photos, true, :class=>"form-control flat custom-control-input"%>
+                        <%= label_tag :permission_to_take_photos, 'No', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :permission_to_take_photos, false, class: "form-control flat custom-control-input" %>
+                      </div>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Consentimiento informado", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                      <div class="custom-control custom-radio">
+                        <%= label_tag :informed_consent, 'Sí', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :informed_consent, true, :class=>"form-control flat custom-control-input"%>
+                        <%= label_tag :informed_consent, 'No', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :informed_consent, false, class: "form-control flat custom-control-input" %>
+                      </div>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group">
+                  <%= label_tag "Seguro escolar", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                      <div class="custom-control custom-radio">
+                        <%= label_tag :school_insurance, 'Sí', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :school_insurance, true, :class=>"form-control flat custom-control-input"%>
+                        <%= label_tag :school_insurance, 'No', class: 'custom-control-label' %>
+                        <%= radio_button :filter, :school_insurance, false, class: "form-control flat custom-control-input" %>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="modal-footer">
+              <!--data-dismiss="modal"-->
+              <button type="submit" class="btn btn-default">Filtrar</button>
+            </div>
+          </div>
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-4">
+      <%= link_to clean_filter_icon, registry_patients_path %>
+    </div>
+  <%end%>
+</div>
+
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    
+    <div class="title_page">
+      Registro
+    </div>
+
+    
+    <div class="x_title">
+      <h2>Pacientes</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%=content_for :dialog%>
+        </li>
+        <li>
+          <%=content_for :dialog_pdf%>
+        </li>
+        <li>
+          <%= link_to(new_resource_icon, new_registry_patient_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+
+
+
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          
+
+          <div class="x_content">
+            
+            <div class="table-responsive">
+              <div class="digg_pagination">
+                <div class="pagination_pages">
+                  <%= will_paginate @registry_patients, :container => false %>
+                </div>
+                <div class="page_info">
+                  <%= page_entries_info @registry_patients, :model => "patient" %>
+                </div>
+              </div>
+              <%= form_tag destroy_multiple_registry_patients_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                <table class="table table-striped jambo_table bulk_action">
+                  <thead>
+                    <tr class="headings">
+                      <th>
+                        <input type="checkbox" id="check-all" class="flat">
+                      </th>
+                      <th class="column-title text-center">Id</th>
+                      <th class="column-title text-center">Nombre</th>
+                      <th class="column-title text-center">Edad</th>
+                      <th class="column-title text-center">Genero</th>
+                      <th class="column-title text-center">Teléfono</th>
+                      <th class="column-title text-center">Condición</th>
+                      <th class="column-title text-center">Estado</th>
+                      <th class="column-title text-center">Tipo de Paciente</th>
+                      <th class="column-title text-center">Permisos</th>
+                      <th class="column-title text-center">Departamento de origen</th>
+                      <th class="column-title text-center" colspan="2">Asistencia</th>
+                      <th class="column-title text-center">Ficha</th>
+                      <th class="column-title text-center" colspan="2">Citas</th>
+                      <th class="column-title no-link last text-center text-center" colspan="3">Action</th>
+                      </th>
+                      <th class="bulk-actions" colspan="16">
+                        <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i>
+                        </a>
+                        
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% @registry_patients.each_with_index do |registry_patient, index| %>
+                      <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                        <td class="center">
+                          <input type="checkbox" name="registry_patient_ids[]" id="registry_patient_id_<%=registry_patient.id%>" value="<%=registry_patient.id%>" class="flat deletable">
+                        </td>
+                        <td>PAC_<%= registry_patient.id %></td>
+                        <td><%= registry_patient.display_name %></td>
+                        <td><%= registry_patient.age %></td>
+                        <td><%= registry_patient.gender %></td>
+                        <td>
+                          <div><%= registry_patient.phone %></div>
+                          <div><%= registry_patient.mobile_phone %></div>
+                        </td>
+                        <td><%= registry_patient.registry_condition.display_name if registry_patient.registry_condition.present?%></td>
+                        <td>
+                          <% if registry_patient.patient_state.present? %>
+                            <% if registry_patient.patient_state == "Activo"%>
+                              <span class="label label-primary"><%=registry_patient.patient_state%></span>
+                            <% else %>
+                              <span class="label label-danger"><%=registry_patient.patient_state%></span>
+                            <% end %>
+                          <% else %>
+                            <span class="label label-success">En Espera</span>
+                          <% end %>
+                        </td>
+
+                        <td><%= registry_patient.patient_type if registry_patient.patient_type.present?%></td>
+                        <td>
+                          <%# registry_treatment_requirement = Registry::TreatmentRequirement.find_by(registry_patient_id: registry_patient.id) %>
+                          
+                          <% unless registry_patient.registry_treatment_requirement.nil?  %>
+                            <div class="permissions" style="float:left;" data-toggle="tooltip" data-placement="bottom" title="Consentimiento informado">
+                              <%= registry_patient.registry_treatment_requirement.informed_consent? ? check_resource_icon : cross_resource_icon %>
+                            </div>
+                            <div class="permissions" style="float:left;" data-toggle="tooltip" data-placement="bottom" title="Permiso para tomar fotos">
+                              <%= registry_patient.registry_treatment_requirement.permission_to_take_photos? ? check_resource_icon : cross_resource_icon %>
+                            </div> 
+                            <div class="permissions" style="float:left;" data-toggle="tooltip" data-placement="bottom" title="Seguro escolar">
+                              <%= registry_patient.registry_treatment_requirement.school_insurance? ? check_resource_icon : cross_resource_icon %>
+                            </div>
+                          <% end %>
+                        </td>
+                        <td><%= registry_patient.registry_department.display_name if registry_patient.registry_department.present?%></td>
+                        
+                        <td class="text-center last split_left_icon_section"><%= link_to assistance_resource_icon, registry_patient_assistance_path(registry_patient) %></td>
+                        <td class="text-center last border-right split_left_icon_section"><%= link_to assistance_plus_resource_icon, registry_patient_new_assistance_registration_path(registry_patient) %></td>
+
+                        <td class="text-center last border-right"><%= link_to medical_record_resource_icon, registry_patient_medical_record_path(registry_patient) %></td>
+
+                        <td class="text-center last split_left_icon_section"><%= link_to calendar_resource_icon, registry_patient_date_schedule_path(registry_patient) %></td>
+                        <td class="text-center last border-right"><%= link_to calendar_plus_resource_icon, registry_patient_date_schedule_path(:patient_id => registry_patient.id, :add_date => true) %></td>
+
+                        <td class="text-center last split_left_icon_section"><%= link_to show_resource_icon, registry_patient %></td>
+                        <td class="text-center last"><%= link_to edit_resource_icon, edit_registry_patient_path(registry_patient) %></td>
+                        <td class="text-center last"><%= link_to delete_resource_icon, registry_patient, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              <%end%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,184 @@
+<div class="row">
+  <%content_for :dialog do%>
+    <div class="col-md-4">
+      <%= form_tag registry_events_path, method: "get" do %>
+
+
+        <!-- Trigger the modal with a button -->
+        <%=filter_button_tag%>
+
+        <!-- Modal -->
+        <div id="ModalFilter" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Filtrar Agenda</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group">
+                    <%= label_tag "Paciente", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                      <%= collection_select(:filter, :patient,
+                      Registry::Patient.all, :id, :display_name, 
+                      {include_blank: true, selected: @patient},{class: "select2_single form-control"}) %>
+                    </div>
+                  </div>
+                  <br><br>
+                  <div class="form-group">
+                    <%= label_tag "Colaborador", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                      <%= collection_select(:filter, :employee, 
+                      Registry::Employee.all.where(active: true), 
+                      :id, :display_name, {include_blank: true,
+                      selected: @employee
+                      },
+                      {:class=>"select2_single form-control"}) %>
+                    </div>
+                  </div>
+                  <br><br>
+                  <div class="form-group">
+                    <%= label_tag "Salón", nil, :class=>"control-label col-md-4 col-sm-3 col-xs-12" %>
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                      <%= collection_select(:filter, :therapy_room, 
+                      Registry::TherapyRoom.all, :id, :display_name, 
+                      {include_blank: true, selected: @therapy_room},
+                      {class: "select2_single form-control"}) %>
+                    </div>
+                  </div>
+              </div>
+              <br><br>
+              <div class="modal-footer">
+                <!--data-dismiss="modal"-->
+                <button type="submit" class="btn btn-default">Filtrar</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-4">
+      <%= link_to clean_filter_icon, registry_events_path %>
+    </div>
+  <%end%>
+</div>
+
+
+<div class="right_col" role="main">
+  <div class="">
+
+    <div class="clearfix"></div>
+    <div class="title_page">
+        Calendario
+      </div>
+    <div class="x_title">
+      <h2>Horario</h2>
+      <ul class="nav navbar-right panel_toolbox panel_button">
+        <li>
+          <%=content_for :dialog%>
+        </li>
+        <li>
+          <%= link_to(new_resource_icon,new_registry_event_path, :"data-toggle"=>"tooltip", :"data-placement"=>"top", :title=>"", :rel=>"nofollow", :"data-original-title"=>"Nuevo", :class=> "plus_header_container")%>
+        </li>
+      </ul>
+    <div class="clearfix"></div>
+    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+      <!-- required for floating -->
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs bar_tabs" role="tablist">
+        <li class="active"><a href="#month" role="tab" data-toggle="tab" aria-expanded="true">Mensual</a>
+        </li>
+        <li><a href="#week" role="tab" data-toggle="tab" aria-expanded="false">Diario</a>
+        </li>
+        <li><a href="#events" role="tab" data-toggle="tab" aria-expanded="false">Agenda</a>
+        </li>        
+      </ul>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="clearfix"></div>
+
+      <div class="tabs x_panel">
+        
+        <div class="x_content">
+          
+          
+
+          <div class="col-xs-12">
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="month">
+                <div class="table-responsive" id="month_calendar_container">
+                  <%= render partial: "calendar", locals: {events: @events} %>
+                </div>
+              </div>
+              <div class="tab-pane" id="week">
+                <div class="table-responsive" id="week_calendar_container">
+                  <%= render partial: "week_calendar", locals: {events: @events} %>
+                </div>
+              </div>
+              <div class="tab-pane" id="events">
+                <%= form_tag destroy_multiple_registry_events_path, method: :delete, data: { confirm: "Are you sure?"}, :class=>"multi_delete_form" do %>
+                    <table class="table table-striped jambo_table bulk_action">
+                      <thead>
+                        <tr class="headings">
+                          <th>
+                            <input type="checkbox" id="check-all" class="flat">
+                          </th>
+                          <th class="column-title">Nombre</th>
+                          <th class="column-title">Colaborador</th>
+                          <th class="column-title">Grupo de Terapia</th>
+                          <th class="column-title">Fecha de inicio</th>
+                          <th class="column-title">Fecha de fin</th>
+                          <th class="column-title">Recurrente</th>
+                          <th class="column-title no-link last text-center" colspan="3">Action</th>
+                          </th>
+                          <th class="bulk-actions" colspan="10">
+                            <a type="button" id="delete_records" class="antoo submit-form" style="color:#fff; font-weight:500; cursor:pointer">Eliminar ( <span class="action-cnt"> </span> ) <%=delete_resource_icon%></i></button>
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <% @registry_events.each_with_index do |registry_event, index| %>
+                          <tr class="<%= index.odd? ? 'odd' : 'even'%> pointer">
+                            <td class="center">
+                                  <input type="checkbox" name="registry_event_ids[]" id="registry_event_id_<%=registry_event.id%>" value="<%=registry_event.id%>" class="flat deletable">
+                            </td>
+
+                            <td><%= registry_event.name %></td>
+                            <td><%= registry_event.registry_employee.display_name %></td>
+                            <td><%= registry_event.registry_therapy_group.display_name if registry_event.registry_therapy_group.present?%></td>
+                            <td><%= registry_event.start_time_formatted %></td>
+                            <td><%= registry_event.end_time_formatted %></td>
+                            <td><%= registry_event.recurring.present? ? content_tag(:i,nil,:class=>"fa fa-check") : "" %></td>
+
+                            <td class="split_left_icon_section last text-center"><%= link_to show_resource_icon, registry_event %></td>
+                            <td class="last text-center"><%= link_to edit_resource_icon, edit_registry_event_path(registry_event) %></td>
+                            <td class="last text-center"><%= link_to delete_resource_icon, registry_event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+
+                    </table>
+                <%end%>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

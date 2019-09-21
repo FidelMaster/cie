@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset='utf-8' />
+	<%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+	<%= wicked_pdf_stylesheet_link_tag "asistencia" -%>
+	<%= wicked_pdf_javascript_include_tag "number_pages" -%>
+	<%= stylesheet_link_tag "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  -%>
+	<style>
+		.alwaysbreak { page-break-before: always; }
+		.nobreak:before { clear:both; }
+		.nobreak { page-break-inside: avoid; }
+		thead { display: table-header-group }
+		tfoot { display: table-row-group }
+		tr { page-break-inside: avoid }
+	</style>
+	<%#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">%>
+	
+</head>
+<body onload='number_pages()'>
+	<div id="header">
+		<div class="row" style="padding: -50px">
+			<% if @report_type == :emplyee_month %>	
+					<div class="col-xs-5">
+						<%= wicked_pdf_image_tag 'CIE_logo.png', width: "10%" %>
+					</div>
+					<div class="col-xs-6">
+						<p style="font-size: 16px !important;">
+							<%= Registry::Employee.find(@employees.first).display_name %>
+						</p>
+						<p style="margin-left: 10%; font-size: 16px !important;">
+							Horario mensual
+						</p>
+					</div>
+			<% else %>
+				<div class="col-xs-5">
+					<%= wicked_pdf_image_tag 'CIE_logo.png', width: "10%" %>
+				</div>
+				<div class="col-xs-6">
+					<h3>
+						<%=@report_scenario%>
+					</h3>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<br> 
+	<div id="content">
+		<main>
+			<div class="" id="week_calendar_container">
+					<% if @report_type == :coordinador_covered_report%>
+						<%= render partial: "boss_month_covered_hour", :formats => [:html]%>
+					<% else%>
+						<% if @report_type == :employee_month%>
+							<%# begin_of_month = @start_date.to_date.beginning_of_month.beginning_of_week%>
+							<%# end_of_month = @start_date.to_date.end_of_month.end_of_week%>
+							<%# while begin_of_month <= end_of_month do %>
+								<%# @start_date = begin_of_month %>
+							<%= render partial: "week_calendar", :formats => [:html]%>
+								<%# begin_of_month += 1.week %>
+							<%# end%>
+						<% elsif @report_type == :hour_report %>
+							<%= render partial: "week_hours_employee", :formats => [:html]%>
+						<% elsif @report_type == :hour_covered_report %>
+							<%= render partial: "week_covered_hours_employee", :formats => [:html]%>
+						<% else %>
+							<%= render partial: "week_calendar", :formats => [:html]%>
+						<% end %>
+					<%end%>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!-- page content -->
+<div class="right_col" role="main">
+	<div class="">
+		
+		<div class="clearfix"></div>
+
+		<div class="title_page">
+	      Perfil de Usuario
+	    </div>
+		<div class="x_title">
+			<h2>Editar Usuario: <%=resource.name%></h2>
+			<div class="clearfix"></div>
+		</div>
+		<div class="row">
+
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				
+				<div class="x_panel">
+					
+					
+					<div class="x_content">
+						<%= devise_error_messages! %>
+						<div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+
+							<div class="profile_img">
+
+								<!-- end of image cropping -->
+								<div id="crop-avatar">
+									<!-- Current avatar -->
+									<%=image_tag(resource.image_source("avatar"), :style=>"max-width: 200px", :class=>"img-responsive avatar-view",	 :alt=>"#{resource.name}", :title=>"#{resource.name}")%>
+
+									<!-- Cropping modal -->
+									<div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+
+											</div>
+										</div>
+									</div>
+									<!-- /.modal -->
+
+									<!-- Loading state -->
+									<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+								</div>
+								<!-- end of image cropping -->
+
+							</div>
+							<h3><%=resource.name%></h3>
+
+							<ul class="list-unstyled user_data">
+								<li><i class="fa fa-map-marker user-profile-icon"></i> CIE
+								</li>
+
+								<li>
+									<i class="fa fa-user user-profile-icon"></i> <%=resource.class.to_s == "Admin::AdminUser" ? "Administrador" : resource.admin_cie_roles.first.name%>
+								</li>
+
+								
+							</ul>
+
+						</div>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="clearfix"></div>
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="x_panel">
+
+										<div class="x_content">
+											<br />
+											<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, :"data-parsley-validate" => nil, :class=>"form-horizontal form-label-left" }) do |f| %>
+
+											<div class="form-group">
+												<%=f.label :name, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do%>
+													Nombre de Usuario <span class="required">*</span>
+												<%end%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.text_field :name, autofocus: true, :class=>"form-control col-md-7 col-xs-12", :placeholder => "User Name", :required=>"required" %>
+												</div>
+											</div>
+											<div class="form-group">
+												<%=f.label :email, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do%>
+													eMail <span class="required">*</span>
+												<%end%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.email_field :email, :placeholder => "eMail", :class=>"form-control col-md-7 col-xs-12", :required=>"required" %>
+												</div>
+											</div>
+											<div class="form-group">
+												<%=f.label :avatar, :class=>"control-label col-md-3 col-sm-3 col-xs-12"%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.file_field :avatar, :placeholder => "Avatar" %>
+												</div>
+											</div>
+											<div class="form-group">
+												<%=f.label :password, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do%>
+													Nueva Contraseña <i>(dejar en blanco si no deseas actualizarlo)</i>
+												<%end%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.password_field :password, autocomplete: "off", :class=>"form-control col-md-7 col-xs-12"  %>
+													<% if @minimum_password_length %>
+													<br />
+													<em>Se requieren al menos <%= @minimum_password_length %> caracteres</em>
+													<% end %>
+												</div>
+											</div>
+											<div class="form-group">
+												<%=f.label :password_confirmation, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do%>
+													Confirmacion de Contraseña
+												<%end%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.password_field :password_confirmation, autocomplete: "off", :class=>"form-control col-md-7 col-xs-12"  %>
+												</div>
+											</div>
+											<div class="ln_solid"></div>
+											<h4>Necesitamos tu contraseña actual para validar y realizar los cambios</h4>
+											<div class="form-group">
+												<%=f.label :password, :class=>"control-label col-md-3 col-sm-3 col-xs-12" do%>
+													Contrasela Actual
+												<%end%>
+												<div class="col-md-6 col-sm-6 col-xs-12">
+													<%= f.password_field :current_password, autocomplete: "off", :class=>"form-control col-md-7 col-xs-12"  %>
+												</div>
+											</div>
+
+											<div class="ln_solid"></div>
+											<div class="form-group">
+												<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+													<%= link_to "Cancelar", session_root_path, :class=>"btn btn-primary"%>
+													<%= f.submit "Actualizar", :class=>"btn btn-success"%>
+												</div>
+											</div>
+
+											<% end %>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: registry_levels
+#
+#  id                    :integer          not null, primary key
+#  name                  :string
+#  description           :text
+#  registry_age_range_id :integer
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  registry_age_range: one
+
+two:
+  name: MyString
+  description: MyText
+  registry_age_range: two

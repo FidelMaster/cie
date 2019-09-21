@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=@page_title%></title>
+	<%= csrf_meta_tags %>
+
+	<%= favicon_link_tag 'favicon.ico', type: 'image/png' %>
+	<%= favicon_link_tag 'favicon.ico'%>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes"/>
+	<!-- jquery librery -->
+
+	<!-- google font -->
+    <!-- fuente lato -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+
+	<!-- screens -->
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="/assets/default.css" />
+    <!-- Smartphones (portrait 240 - 320) -->
+    <link rel="stylesheet" href="/assets/s240_base.css" type="text/css" media="only screen and (min-width : 240px)" />
+    <link rel="stylesheet" href="/assets/s240_body.css" type="text/css" media="only screen and (min-width : 240px)" />
+    <link rel="stylesheet" href="/assets/s240_update.css" type="text/css" media="only screen and (min-width : 240px)" />
+    <link rel="stylesheet" href="/assets/s240_login.css" type="text/css" media="only screen and (min-width : 240px)" />
+
+
+    <!-- js -->
+    <script src="/assets/show_hide.js"></script>
+</head>
+<body class="login">
+	<%=devise_error_messages!%>
+	<div class="container_login">
+		<div class="middle_container">
+			<div class="middle_cell">
+				
+				<div class="login_wrap text-center">
+					<div class="container_title_login_form">
+						<div class="title_login_form inline_divs">
+							<div class="icon_register">
+								<svg class="svg-icon" viewBox="0 0 20 	20">
+									<path fill="none" d="M19.521,7.267c-0.144-0.204-0.38-0.328-0.631-0.328h-3.582l-0.272-1.826c-0.055-0.379-0.379-0.656-0.76-0.656
+									H9.802l-0.39-0.891c-0.123-0.279-0.399-0.46-0.704-0.46H1.11c-0.222,0-0.434,0.096-0.58,0.264C0.385,3.537,0.319,3.76,0.349,3.981
+									l1.673,12.243c0,0,0,0,0,0.002v0.004c0.015,0.113,0.06,0.213,0.119,0.303c0.006,0.009,0.006,0.023,0.012,0.033
+									c0.012,0.016,0.033,0.024,0.046,0.04c0.054,0.065,0.114,0.118,0.185,0.161c0.027,0.018,0.051,0.035,0.078,0.048
+									c0.099,0.045,0.206,0.078,0.32,0.078h0.002l0,0h13.03c0.323,0,0.611-0.201,0.722-0.505l3.076-8.416
+									C19.698,7.735,19.663,7.474,19.521,7.267z M8.203,4.644l0.391,0.889c0.123,0.279,0.399,0.461,0.704,0.461h4.315l0.141,0.944H5.859
+									c-0.323,0-0.611,0.201-0.723,0.505l-2.011,5.505L1.992,4.644H8.203z M15.276,15.356H3.882l2.515-6.879H17.79L15.276,15.356z"></path>
+								</svg>
+							</div>
+							<div class="">
+								Administración
+							</div>
+						</div>
+					</div>
+
+					<div class="form_login">
+						<div class="description_title_login_form">
+							Por favor ingrese sus datos
+						</div>
+						<!-- form -->
+						<div class="form_container_login">
+							<%= yield%>
+						</div>
+					</div>
+					<!-- footer min height -->
+					<div class="min_height_footer">
+						©2018 All Rights Reserved. Digitech.
+						<!-- <br> -->
+						Privacy and Terms
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		<!-- bottom -->
+		<div class="footer_login">
+			©2018 All Rights Reserved. Digitech.
+			<!-- <br> -->
+			Privacy and Terms
+		</div>
+		
+	</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<%= month_calendar events: @calendar_registry_events do |day, occurrences|%>
+	<div>
+	  <h1 class=""><%= I18n.l(day, format: :custom_calendar)%></h1>
+	</div>
+	<% occurrences.each do |occurrence| %>
+	  <div style="background-color: <%= occurrence.registry_event.registry_therapy_room.registry_therapy_type.label_color %>;">
+			<%= link_to occurrence.registry_event.display_name, 
+			registry_event_path(occurrence.registry_event), 
+			style: 'color: black !important;',
+			title: "#{occurrence.display_event_info}",
+			:rel => 'tooltip', "data-placement" => "bottom" %>
+	  </div>
+	<%end%>
+<%end%>

@@ -1,0 +1,57 @@
+<div class="right_col" role="main" style="min-height: 1053px;">
+  <div class="">
+
+    <div class="clearfix"></div>
+
+    <div class="title_page">
+        Terapias
+      </div>
+    <div class="x_title">
+      <h2><%=@registry_age_range.display_name %></h2>
+      <div class="clearfix"></div>
+    </div>
+    <% if notice.present?%>
+      <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+        <%= notice %>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="x_panel">
+
+          <div class="x_content">
+
+            <div class="col-md-8 col-lg-8 col-sm-7">
+              <!-- blockquote -->
+              <blockquote>
+
+                <h2>Nombre:</h2>
+                <h4><%= @registry_age_range.name %></h4>
+
+                <h2>Edad Mínima:</h2>
+                <h4><%= @registry_age_range.min_age %></h4>
+                
+                <h2>Edad Máxima:</h2>
+                <h4><%= @registry_age_range.max_age %></h4>
+                
+                <h2>Descripción:</h2>
+                <h4><%= @registry_age_range.description %></h4>
+                
+              </blockquote>
+
+              <blockquote class="blockquote-reverse">
+
+                  <%= link_to 'Editar', edit_registry_age_range_path(@registry_age_range), :class=>"btn btn-primary" %>
+                  <%= link_to 'Atrás', registry_age_ranges_path, :class=>"btn btn-success" %>
+
+              </blockquote>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
